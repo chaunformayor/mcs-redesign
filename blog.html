@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Missouri Construction Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .blog-layout { display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: start; }
+    .blog-featured { background: white; border-radius: 18px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; display: grid; grid-template-columns: 1fr 1fr; }
+    .blog-featured-img { min-height: 320px; background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; position: relative; }
+    .blog-featured-img svg { display: none; }
+    .blog-featured-img .featured-tag { position: absolute; top: 16px; left: 16px; background: var(--orange); color: white; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 99px; letter-spacing: .5px; text-transform: uppercase; }
+    .blog-featured-body { padding: 36px 32px; display: flex; flex-direction: column; justify-content: center; }
+    .blog-featured-body .cat { color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+    .blog-featured-body h2 { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
+    .blog-featured-body p { font-size: 14px; color: var(--slate); line-height: 1.7; margin-bottom: 20px; }
+    .blog-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--slate); margin-bottom: 16px; }
+    .blog-meta .dot { width: 3px; height: 3px; background: var(--slate); border-radius: 50%; }
+    .blog-grid-list { display: flex; flex-direction: column; gap: 20px; }
+    .blog-list-card { background: white; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; display: grid; grid-template-columns: 180px 1fr; transition: box-shadow .2s; }
+    .blog-list-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+    .blog-list-img { display: flex; align-items: center; justify-content: center; }
+    .blog-list-img svg { width: 40px; height: 40px; fill: rgba(249,115,22,.4); }
+    .blog-list-body { padding: 20px 24px; }
+    .blog-list-body .cat { color: var(--orange); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+    .blog-list-body h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+    .blog-list-body p { font-size: 13px; color: var(--slate); line-height: 1.6; margin-bottom: 12px; }
+    .read-more { color: var(--orange); font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+    .read-more:hover { gap: 8px; }
+    .sidebar { display: flex; flex-direction: column; gap: 24px; }
+    .sidebar-card { background: white; border-radius: 14px; border: 1px solid var(--border); padding: 24px; }
+    .sidebar-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .sidebar-cta { background: var(--charcoal); color: white; border-radius: 14px; padding: 28px 24px; text-align: center; }
+    .sidebar-cta h3 { color: white; border-bottom-color: rgba(255,255,255,.1); }
+    .sidebar-cta p { font-size: 13px; color: #9ca3af; margin-bottom: 16px; line-height: 1.6; }
+    .sidebar-cta .btn-primary { width: 100%; justify-content: center; }
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { background: var(--light); color: var(--slate); font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 99px; text-decoration: none; border: 1px solid var(--border); transition: all .2s; }
+    .tag:hover { background: var(--orange); color: white; border-color: var(--orange); }
+    .recent-post { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .recent-post:last-child { border-bottom: 0; padding-bottom: 0; }
+    .recent-post-thumb { width: 56px; height: 56px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .recent-post-thumb svg { width: 24px; height: 24px; fill: rgba(249,115,22,.5); }
+    .recent-post h4 { font-size: 13px; font-weight: 600; line-height: 1.35; margin-bottom: 4px; }
+    .recent-post span { font-size: 11px; color: var(--slate); }
+    .newsletter-form { display: flex; flex-direction: column; gap: 10px; }
+    .newsletter-form input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; outline: none; }
+    .newsletter-form input:focus { border-color: var(--orange); }
+    .newsletter-form button { background: var(--orange); color: white; border: none; border-radius: 8px; padding: 11px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s; }
+    .newsletter-form button:hover { background: var(--orange-dark); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div>
+    <div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/portfolio">Portfolio</a><a href="/blog" class="active">Blog</a><a href="/contact">Contact</a>
+    <a href="/contact" class="nav-cta">Request Quote</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a><span class="sep">›</span><span>Blog</span></div>
+    <div class="page-hero-label">Expert Advice</div>
+    <h1>Construction Tips &<br><em>Industry Insights</em></h1>
+    <p>Helpful guides, project spotlights, and expert advice from Missouri's most trusted construction team.</p>
+  </div>
+</div>
+
+<section style="background:var(--light)">
+  <div class="container">
+    <div class="blog-layout">
+      <div>
+        <!-- FEATURED POST -->
+        <div class="blog-featured">
+          <div class="blog-featured-img">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span class="featured-tag">⭐ Featured</span>
+          </div>
+          <div class="blog-featured-body">
+            <div class="cat">Remodeling</div>
+            <h2>5 Kitchen Remodel Mistakes Missouri Homeowners Make</h2>
+            <div class="blog-meta"><span>May 8, 2025</span><span class="dot"></span><span>5 min read</span><span class="dot"></span><span>By Mike Johnson</span></div>
+            <p>Before you start demo on that kitchen, read this. From skipping permits to underestimating timelines, these are the costliest mistakes we see — and how to avoid every one of them.</p>
+            <a href="/blog/kitchen-remodel-mistakes" class="btn-primary" style="align-self:flex-start">Read Article →</a>
+          </div>
+        </div>
+
+        <!-- ARTICLE LIST -->
+        <div class="blog-grid-list">
+          <div class="blog-list-card">
+            <div class="blog-list-img" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=400&q=80');background-size:cover;background-position:center">
+            </div>
+            <div class="blog-list-body">
+              <div class="cat">Roofing</div>
+              <h3>When to Repair vs. Replace Your Roof in Missouri</h3>
+              <div class="blog-meta"><span>Apr 22, 2025</span><span class="dot"></span><span>4 min read</span></div>
+              <p>Missouri weather is brutal on roofs. Here's an honest guide to knowing when a repair will hold — and when you're just delaying the inevitable.</p>
+              <a href="#" class="read-more">Read Article →</a>
+            </div>
+          </div>
+          <div class="blog-list-card">
+            <div class="blog-list-img" style="background-image:url('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=400&q=80');background-size:cover;background-position:center">
+            </div>
+            <div class="blog-list-body">
+              <div class="cat">Electrical</div>
+              <h3>Signs Your Home's Electrical Panel Needs an Upgrade</h3>
+              <div class="blog-meta"><span>Apr 10, 2025</span><span class="dot"></span><span>3 min read</span></div>
+              <p>Flickering lights, tripped breakers, and outdated fuse boxes are red flags. Learn when to call a licensed electrician — before something goes wrong.</p>
+              <a href="#" class="read-more">Read Article →</a>
+            </div>
+          </div>
+          <div class="blog-list-card">
+            <div class="blog-list-img" style="background-image:url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=400&q=80');background-size:cover;background-position:center">
+            </div>
+            <div class="blog-list-body">
+              <div class="cat">Property Rehab</div>
+              <h3>How to Evaluate a Distressed Property Before You Buy</h3>
+              <div class="blog-meta"><span>Mar 28, 2025</span><span class="dot"></span><span>6 min read</span></div>
+              <p>Before you close on that fixer-upper, walk through it with this checklist. We cover structural, mechanical, and cosmetic items that affect your rehab budget.</p>
+              <a href="#" class="read-more">Read Article →</a>
+            </div>
+          </div>
+          <div class="blog-list-card">
+            <div class="blog-list-img" style="background-image:url('https://images.unsplash.com/photo-1504308688628-5fd870a06aeb?auto=format&fit=crop&w=400&q=80');background-size:cover;background-position:center">
+            </div>
+            <div class="blog-list-body">
+              <div class="cat">Plumbing</div>
+              <h3>What to Do When a Pipe Bursts in Winter</h3>
+              <div class="blog-meta"><span>Mar 12, 2025</span><span class="dot"></span><span>3 min read</span></div>
+              <p>Missouri winters can cause frozen and burst pipes. Here's the exact 5-step process to minimize damage while you wait for a plumber to arrive.</p>
+              <a href="#" class="read-more">Read Article →</a>
+            </div>
+          </div>
+          <div class="blog-list-card">
+            <div class="blog-list-img" style="background-image:url('https://images.unsplash.com/photo-1565182999561-18d7dc61c393?auto=format&fit=crop&w=400&q=80');background-size:cover;background-position:center">
+            </div>
+            <div class="blog-list-body">
+              <div class="cat">Remodeling</div>
+              <h3>Basement Finishing: Where to Spend and Where to Save</h3>
+              <div class="blog-meta"><span>Feb 27, 2025</span><span class="dot"></span><span>5 min read</span></div>
+              <p>Not all basement upgrades are equal. We break down which investments add real value — and which splurges you'll regret.</p>
+              <a href="#" class="read-more">Read Article →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="sidebar-cta">
+          <h3>Ready to Start a Project?</h3>
+          <p>Get a free consultation and estimate from Missouri's most trusted construction team.</p>
+          <a href="/contact" class="btn-primary">Request Free Quote</a>
+          <p style="margin-top:12px;font-size:12px;color:#9ca3af">Or call: (636) 252-4203</p>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Newsletter</h3>
+          <p style="font-size:13px;color:var(--slate);margin-bottom:14px">Get monthly tips and project inspiration delivered to your inbox.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Your email address" id="nl-email" />
+            <button onclick="subscribeNewsletter()">Subscribe →</button>
+          </div>
+          <p id="nl-msg" style="font-size:12px;color:var(--green);margin-top:8px;display:none">Thanks! You're subscribed.</p>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Recent Posts</h3>
+          <div class="recent-post">
+            <div class="recent-post-thumb" style="background-image:url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=120&q=80');background-size:cover;background-position:center"></div>
+            <div><h4>5 Kitchen Remodel Mistakes Missouri Homeowners Make</h4><span>May 8, 2025</span></div>
+          </div>
+          <div class="recent-post">
+            <div class="recent-post-thumb" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=120&q=80');background-size:cover;background-position:center"></div>
+            <div><h4>When to Repair vs. Replace Your Roof</h4><span>Apr 22, 2025</span></div>
+          </div>
+          <div class="recent-post">
+            <div class="recent-post-thumb" style="background-image:url('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=120&q=80');background-size:cover;background-position:center"></div>
+            <div><h4>Signs Your Electrical Panel Needs an Upgrade</h4><span>Apr 10, 2025</span></div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Topics</h3>
+          <div class="tag-cloud">
+            <a href="#" class="tag">Remodeling</a>
+            <a href="#" class="tag">Roofing</a>
+            <a href="#" class="tag">Electrical</a>
+            <a href="#" class="tag">Plumbing</a>
+            <a href="#" class="tag">Property Rehab</a>
+            <a href="#" class="tag">General Contracting</a>
+            <a href="#" class="tag">Tips & Advice</a>
+            <a href="#" class="tag">Missouri</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Have a Project in Mind?</h2>
+  <p>Our team is ready to help. Get a free estimate — no commitment required.</p>
+  <div class="cta-btns">
+    <a href="/contact" class="btn-white">Request Free Quote</a>
+    <a href="tel:6362524203" class="btn-outline-white">📞 (636) 252-4203</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div><div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div></a>
+      <p>Quality craftsmanship across Missouri since 1999.</p>
+      <div class="footer-social"><a href="#" class="social-btn"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div>
+    </div>
+    <div><h4>Services</h4><ul><li><a href="/services">General Contracting</a></li><li><a href="/services">Remodeling</a></li><li><a href="/services">Roofing</a></li><li><a href="/services">Plumbing</a></li><li><a href="/services">Electrical</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="/about">About Us</a></li><li><a href="/portfolio">Portfolio</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div><h4>Contact Us</h4>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>(636) 252-4203</div>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>info@missouriconstructionservice.com</div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 Missouri Construction Service. All rights reserved.</p><div class="footer-bottom-links"><a href="/privacy">Privacy Policy</a><a href="/contact">Contact</a></div></div>
+</footer>
+
+<script>
+function subscribeNewsletter() {
+  const email = document.getElementById('nl-email').value;
+  if (!email || !email.includes('@')) return;
+  document.getElementById('nl-msg').style.display = 'block';
+  document.getElementById('nl-email').value = '';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Inquiry {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  service   String?
+  message   String   @db.Text
+  source    String   @default("contact-form")
+  status    String   @default("new")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("inquiries")
+}
+
+model QuoteRequest {
+  id                 Int      @id @default(autoincrement())
+  name               String
+  email              String
+  phone              String
+  service            String
+  projectDescription String?  @map("project_description") @db.Text
+  address            String?
+  timeline           String?
+  budget             String?
+  status             String   @default("new")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  @@map("quote_requests")
+}
+
+model BlogPost {
+  id              Int      @id @default(autoincrement())
+  title           String
+  slug            String   @unique
+  content         String?  @db.Text
+  excerpt         String?  @db.Text
+  category        String?
+  featuredImage   String?  @map("featured_image")
+  status          String   @default("draft")
+  author          String   @default("Admin")
+  metaTitle       String?  @map("meta_title")
+  metaDescription String?  @map("meta_description") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("blog_posts")
+}
+
+model Project {
+  id            Int            @id @default(autoincrement())
+  title         String
+  category      String?
+  service       String?
+  location      String?
+  duration      String?
+  description   String?        @db.Text
+  featuredImage String?        @map("featured_image")
+  status        String         @default("active")
+  sortOrder     Int            @default(0) @map("sort_order")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  images        ProjectImage[]
+
+  @@map("projects")
+}
+
+model ProjectImage {
+  id        Int     @id @default(autoincrement())
+  projectId Int     @map("project_id")
+  imagePath String  @map("image_path")
+  caption   String?
+  sortOrder Int     @default(0) @map("sort_order")
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_images")
+}
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  name      String
+  location  String?
+  rating    Int      @default(5)
+  content   String   @db.Text
+  status    String   @default("active")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("testimonials")
+}
+
+model SiteSetting {
+  id           Int      @id @default(autoincrement())
+  settingKey   String   @unique @map("setting_key")
+  settingValue String?  @map("setting_value") @db.Text
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("site_settings")
+}

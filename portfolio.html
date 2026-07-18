@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Missouri Construction Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 36px; }
+    .filter-btn { padding: 9px 20px; border-radius: 99px; border: 1.5px solid var(--border); background: white; font-size: 13px; font-weight: 600; color: var(--slate); cursor: pointer; transition: all .2s; font-family: inherit; }
+    .filter-btn:hover, .filter-btn.active { background: var(--orange); border-color: var(--orange); color: white; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .gallery-item { border-radius: 14px; overflow: hidden; position: relative; cursor: pointer; }
+    .gallery-item.featured { grid-column: span 2; }
+    .gallery-thumb {
+      height: 240px; background: var(--charcoal);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+      transition: transform .3s;
+    }
+    .gallery-item.featured .gallery-thumb { height: 340px; }
+    .gallery-thumb-bg { position: absolute; inset: 0; opacity: 1; background-size: cover; background-position: center; transition: transform .4s; }
+    .gallery-item:hover .gallery-thumb-bg { transform: scale(1.05); }
+    .gallery-thumb svg { display: none; }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 50%); opacity: 0; transition: opacity .3s; display: flex; align-items: flex-end; padding: 20px; }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay-content h3 { color: white; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .gallery-overlay-content p { color: rgba(255,255,255,.8); font-size: 12px; }
+    .gallery-info { padding: 14px 16px; background: white; border: 1px solid var(--border); border-top: 0; border-radius: 0 0 14px 14px; }
+    .gallery-info-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .gallery-info h3 { font-size: 15px; font-weight: 700; }
+    .gallery-info p { font-size: 13px; color: var(--slate); }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 999; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 18px; max-width: 700px; width: 100%; overflow: hidden; }
+    .modal-img { height: 360px; background: var(--charcoal); display: flex; align-items: center; justify-content: center; }
+    .modal-img svg { width: 80px; height: 80px; fill: rgba(249,115,22,.4); }
+    .modal-body { padding: 28px 32px; }
+    .modal-body h2 { font-family: 'Oswald', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+    .modal-body p { font-size: 14px; color: var(--slate); line-height: 1.7; margin-bottom: 20px; }
+    .modal-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; }
+    .modal-meta-item { font-size: 13px; }
+    .modal-meta-item strong { color: var(--charcoal); display: block; font-weight: 700; margin-bottom: 2px; }
+    .modal-meta-item span { color: var(--slate); }
+    .modal-close { float: right; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--slate); margin: -4px -4px 0 0; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div>
+    <div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/portfolio" class="active">Portfolio</a><a href="/blog">Blog</a><a href="/contact">Contact</a>
+    <a href="/contact" class="nav-cta">Request Quote</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a><span class="sep">›</span><span>Portfolio</span></div>
+    <div class="page-hero-label">Our Work</div>
+    <h1>500+ Projects.<br><em>All Done Right.</em></h1>
+    <p>Browse a selection of completed projects across Missouri — kitchens, roofs, full rehabs, and everything in between.</p>
+  </div>
+</div>
+
+<section style="background:var(--light)">
+  <div class="container">
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="remodeling">Remodeling</button>
+      <button class="filter-btn" data-filter="roofing">Roofing</button>
+      <button class="filter-btn" data-filter="contracting">General Contracting</button>
+      <button class="filter-btn" data-filter="rehab">Property Rehab</button>
+      <button class="filter-btn" data-filter="electrical">Electrical</button>
+    </div>
+
+    <div class="gallery-grid" id="gallery">
+      <div class="gallery-item featured" data-category="remodeling" onclick="openModal('kitchen-remodel')">
+        <div class="gallery-thumb">
+          <div class="gallery-thumb-bg" style="background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=900&q=80');"></div>
+          <svg viewBox="0 0 24 24"><path d="M21 6.5l-4-4-8.5 8.5-2 4 4-2L21 6.5z"/></svg>
+          <div class="gallery-overlay"><div class="gallery-overlay-content"><h3>Chesterfield Kitchen Remodel</h3><p>View Project →</p></div></div>
+        </div>
+        <div class="gallery-info">
+          <div class="gallery-info-top"><h3>Chesterfield Kitchen Remodel</h3><span class="badge badge-orange">Remodeling</span></div>
+          <p>Full kitchen renovation — custom cabinets, quartz counters, new appliances</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="roofing" onclick="openModal('ballwin-roof')">
+        <div class="gallery-thumb">
+          <div class="gallery-thumb-bg" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80');"></div>
+          <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v9h6v-5h2v5h6v-9h3L12 3z"/></svg>
+          <div class="gallery-overlay"><div class="gallery-overlay-content"><h3>Ballwin Roof Replacement</h3><p>View Project →</p></div></div>
+        </div>
+        <div class="gallery-info">
+          <div class="gallery-info-top"><h3>Ballwin Roof Replacement</h3><span class="badge badge-orange">Roofing</span></div>
+          <p>Complete shingle replacement after hail damage — 2,400 sq ft</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="rehab" onclick="openModal('st-louis-rehab')">
+        <div class="gallery-thumb">
+          <div class="gallery-thumb-bg" style="background-image: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80');"></div>
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          <div class="gallery-overlay"><div class="gallery-overlay-content"><h3>St. Louis Property Rehab</h3><p>View Project →</p></div></div>
+        </div>
+        <div class="gallery-info">
+          <div class="gallery-info-top"><h3>St. Louis Full Rehab</h3><span class="badge badge-orange">Rehab</span></div>
+          <p>Complete gut rehab — all trades, 90-day turnaround for investor client</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="remodeling" onclick="openModal('master-bath')">
+        <div class="gallery-thumb">
+          <div class="gallery-thumb-bg" style="background-image: url('https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=800&q=80');"></div>
+          <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+          <div class="gallery-overlay"><div class="gallery-overlay-content"><h3>Master Bath Renovation</h3><p>View Project →</p></div></div>
+        </div>
+        <div class="gallery-info">
+          <div class="gallery-info-top"><h3>Master Bath Renovation</h3><span class="badge badge-orange">Remodeling</span></div>
+          <p>Walk-in tile shower, double vanity, heated floors — Webster Groves</p>
+        </div>
+      </div>
+
+      <div class="gallery-item featured" data-category="contracting" onclick="openModal('commercial-build')">
+        <div class="gallery-thumb">
+          <div class="gallery-thumb-bg" style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80');"></div>
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <div class="gallery-overlay"><div class="gallery-overlay-content"><h3>Commercial Office Build-Out</h3><p>View Project →</p></div></div>
+        </div>
+        <div class="gallery-info">
+          <div class="gallery-info-top"><h3>Commercial Office Build-Out</h3><span class="badge badge-orange">General Contracting</span></div>
+          <p>3,200 sq ft office build-out — framing, drywall, electrical, HVAC coordination</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="electrical" onclick="openModal('panel-upgrade')">
+        <div class="gallery-thumb">
+          <div class="gallery-thumb-bg" style="background-image: url('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80');"></div>
+          <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+          <div class="gallery-overlay"><div class="gallery-overlay-content"><h3>200A Panel Upgrade</h3><p>View Project →</p></div></div>
+        </div>
+        <div class="gallery-info">
+          <div class="gallery-info-top"><h3>200A Panel Upgrade</h3><span class="badge badge-orange">Electrical</span></div>
+          <p>Full service upgrade + EV charger installation — Kirkwood, MO</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="remodeling" onclick="openModal('basement')">
+        <div class="gallery-thumb">
+          <div class="gallery-thumb-bg" style="background-image: url('https://images.unsplash.com/photo-1565182999561-18d7dc61c393?auto=format&fit=crop&w=800&q=80');"></div>
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <div class="gallery-overlay"><div class="gallery-overlay-content"><h3>Basement Finishing</h3><p>View Project →</p></div></div>
+        </div>
+        <div class="gallery-info">
+          <div class="gallery-info-top"><h3>Basement Finishing</h3><span class="badge badge-orange">Remodeling</span></div>
+          <p>Unfinished basement turned into home theater + rec room — Wildwood, MO</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="roofing" onclick="openModal('metal-roof')">
+        <div class="gallery-thumb">
+          <div class="gallery-thumb-bg" style="background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=800&q=80');"></div>
+          <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v9h6v-5h2v5h6v-9h3L12 3z"/></svg>
+          <div class="gallery-overlay"><div class="gallery-overlay-content"><h3>Metal Roof Installation</h3><p>View Project →</p></div></div>
+        </div>
+        <div class="gallery-info">
+          <div class="gallery-info-top"><h3>Metal Roof Installation</h3><span class="badge badge-orange">Roofing</span></div>
+          <p>Standing-seam metal roof on 1920s farmhouse — O'Fallon, MO</p>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="rehab" onclick="openModal('duplex-rehab')">
+        <div class="gallery-thumb">
+          <div class="gallery-thumb-bg" style="background-image: url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80');"></div>
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+          <div class="gallery-overlay"><div class="gallery-overlay-content"><h3>Duplex Rehab</h3><p>View Project →</p></div></div>
+        </div>
+        <div class="gallery-info">
+          <div class="gallery-info-top"><h3>Duplex Rehab</h3><span class="badge badge-orange">Rehab</span></div>
+          <p>Two-unit investment property — full rehab, both units, 60 days</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div class="cta-strip-inner">
+    <div><h3>Like what you see?</h3><p>Let's talk about your project — free consultation, no obligation.</p></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <a href="/contact" class="btn-primary">Start Your Project →</a>
+      <a href="tel:6362524203" class="btn-outline">📞 (636) 252-4203</a>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modal-content">
+    <div class="modal-img" id="modal-img">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    </div>
+    <div class="modal-body">
+      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
+      <h2 id="modal-title">Project Name</h2>
+      <div class="modal-meta" id="modal-meta"></div>
+      <p id="modal-desc">Project description.</p>
+      <a href="/contact" class="btn-primary">Start a Similar Project →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div><div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div></a>
+      <p>Quality craftsmanship across Missouri since 1999.</p>
+      <div class="footer-social"><a href="#" class="social-btn"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div>
+    </div>
+    <div><h4>Services</h4><ul><li><a href="/services">General Contracting</a></li><li><a href="/services">Remodeling</a></li><li><a href="/services">Roofing</a></li><li><a href="/services">Plumbing</a></li><li><a href="/services">Electrical</a></li><li><a href="/services">Property Rehabs</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="/about">About Us</a></li><li><a href="/portfolio">Portfolio</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div><h4>Contact Us</h4>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>(636) 252-4203</div>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>info@missouriconstructionservice.com</div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 Missouri Construction Service. All rights reserved.</p><div class="footer-bottom-links"><a href="/privacy">Privacy Policy</a><a href="/contact">Contact</a></div></div>
+</footer>
+
+<script>
+const projects = {
+  'kitchen-remodel': { title: 'Chesterfield Kitchen Remodel', location: 'Chesterfield, MO', service: 'Remodeling', duration: '6 weeks', desc: 'Complete kitchen gut-and-replace for a family of four. We removed all existing cabinets, installed custom shaker-style cabinetry, quartz countertops, a new island, tile backsplash, and new appliances. Also included updated electrical and under-cabinet lighting.', bg: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=900&q=80' },
+  'ballwin-roof': { title: 'Ballwin Roof Replacement', location: 'Ballwin, MO', service: 'Roofing', duration: '2 days', desc: 'Emergency roof replacement following major hail storm. 2,400 sq ft of architectural shingles, new ice & water shield, ridge vent installation, and all new flashing. Coordinated directly with homeowner\'s insurance adjuster.', bg: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=900&q=80' },
+  'st-louis-rehab': { title: 'St. Louis Full Property Rehab', location: 'St. Louis, MO', service: 'Property Rehab', duration: '90 days', desc: 'Complete gut rehab of a 1,800 sq ft single-family investment property. Scope included new roof, updated electrical panel, full re-pipe, kitchen and bath renovation, hardwood floors, fresh paint throughout, and new HVAC.', bg: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=900&q=80' },
+  'master-bath': { title: 'Master Bath Renovation', location: 'Webster Groves, MO', service: 'Remodeling', duration: '3 weeks', desc: 'Transformed a dated master bathroom into a spa-like retreat. Features include a custom tile walk-in shower with bench, freestanding soaking tub, double floating vanity, and electric radiant heated floors.', bg: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=900&q=80' },
+  'commercial-build': { title: 'Commercial Office Build-Out', location: 'Clayton, MO', service: 'General Contracting', duration: '10 weeks', desc: 'Full build-out of a 3,200 sq ft commercial office space in a Class A building. Scope included demising walls, interior framing, drywall, suspended ceilings, commercial flooring, electrical, and final punch-out for tenant move-in.', bg: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80' },
+  'panel-upgrade': { title: '200A Panel Upgrade + EV Charger', location: 'Kirkwood, MO', service: 'Electrical', duration: '1 day', desc: 'Upgraded an aging 100A service panel to 200A with a new meter base and all new breakers. Also ran a dedicated 50A circuit to the garage for a Level 2 EV charger. Passed city inspection first visit.', bg: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=900&q=80' },
+  'basement': { title: 'Basement Finishing', location: 'Wildwood, MO', service: 'Remodeling', duration: '5 weeks', desc: 'Converted an unfinished 1,100 sq ft basement into a full entertainment level featuring a home theater room, wet bar, half bath, and open rec room. Includes engineered hardwood floors, recessed lighting, and custom built-ins.', bg: 'https://images.unsplash.com/photo-1565182999561-18d7dc61c393?auto=format&fit=crop&w=900&q=80' },
+  'metal-roof': { title: 'Standing-Seam Metal Roof', location: "O'Fallon, MO", service: 'Roofing', duration: '4 days', desc: "Installed a 40-year standing-seam metal roof on a 1920s farmhouse-style home. Included full tear-off of two layers of existing shingles, OSB decking repairs, and ice/water barrier. The homeowner's forever roof.", bg: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=900&q=80' },
+  'duplex-rehab': { title: 'Duplex Investment Rehab', location: 'St. Louis, MO', service: 'Property Rehab', duration: '60 days', desc: 'Full rehab of both units in a duplex investment property. Each unit received new kitchens, updated baths, LVP flooring, fresh paint, updated electrical, and exterior work including a new roof and tuckpointing.', bg: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=900&q=80' },
+};
+
+function openModal(id) {
+  const p = projects[id];
+  if (!p) return;
+  document.getElementById('modal-title').textContent = p.title;
+  document.getElementById('modal-desc').textContent = p.desc;
+  const mi = document.getElementById('modal-img');
+  mi.style.backgroundImage = `url(${p.bg})`;
+  mi.style.backgroundSize = 'cover';
+  mi.style.backgroundPosition = 'center';
+  mi.querySelector('svg').style.display = 'none';
+  document.getElementById('modal-meta').innerHTML = `
+    <div class="modal-meta-item"><strong>Location</strong><span>${p.location}</span></div>
+    <div class="modal-meta-item"><strong>Service</strong><span>${p.service}</span></div>
+    <div class="modal-meta-item"><strong>Duration</strong><span>${p.duration}</span></div>
+  `;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) {
+    document.getElementById('modal').classList.remove('open');
+  }
+}
+
+// Filter
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.style.display = (filter === 'all' || item.dataset.category === filter) ? '' : 'none';
+    });
+  });
+});
+</script>
+</body>
+</html>

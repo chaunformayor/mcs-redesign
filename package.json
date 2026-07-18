@@ -1,0 +1,25 @@
+{
+  "name": "mcs-redesign",
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "prisma generate",
+    "postinstall": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "node prisma/seed.js",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "@vercel/blob": "^0.27.0",
+    "formidable": "^3.5.2",
+    "jose": "^5.9.6"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Missouri Construction Service - Quality Construction & Renovation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #f97316;
+      --orange-dark: #ea6c09;
+      --charcoal: #1c1c1e;
+      --charcoal-2: #2d2d2f;
+      --slate: #6b7280;
+      --light: #f5f5f5;
+      --white: #ffffff;
+      --border: #e5e7eb;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--charcoal); background: var(--white); }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--charcoal);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 68px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.35);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 42px; height: 42px;
+      background: var(--orange);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 24px; height: 24px; fill: var(--white); }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .logo-text span:first-child {
+      font-family: 'Oswald', sans-serif;
+      font-size: 17px; font-weight: 700;
+      color: var(--white); letter-spacing: .5px;
+    }
+    .logo-text span:last-child {
+      font-size: 10px; color: var(--orange);
+      letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;
+    }
+    .nav-links { display: flex; align-items: center; gap: 6px; }
+    .nav-links a {
+      color: #d1d5db; text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      padding: 8px 14px; border-radius: 6px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); background: rgba(255,255,255,.08); }
+    .nav-cta {
+      background: var(--orange); color: var(--white) !important;
+      border-radius: 6px; padding: 9px 18px !important;
+      font-weight: 600 !important;
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: var(--orange-dark) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 92vh;
+      display: flex; align-items: center;
+      background: linear-gradient(135deg, #1c1c1e 0%, #2d2d2f 50%, #1a1a1a 100%);
+      overflow: hidden;
+    }
+    .hero-bg-pattern {
+      position: absolute; inset: 0; opacity: .04;
+      background-image: repeating-linear-gradient(
+        45deg,
+        var(--orange) 0, var(--orange) 1px,
+        transparent 0, transparent 50%
+      );
+      background-size: 30px 30px;
+    }
+    .hero-accent {
+      position: absolute; right: -80px; top: -80px;
+      width: 520px; height: 520px;
+      background: var(--orange);
+      border-radius: 50%;
+      opacity: .07;
+    }
+    .hero-accent-2 {
+      position: absolute; left: -60px; bottom: -60px;
+      width: 320px; height: 320px;
+      background: var(--orange);
+      border-radius: 50%;
+      opacity: .05;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 1200px; margin: 0 auto; padding: 0 5%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(249,115,22,.15);
+      border: 1px solid rgba(249,115,22,.3);
+      color: var(--orange); font-size: 12px; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 99px;
+      margin-bottom: 20px;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--orange); border-radius: 50%; }
+    .hero h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 700; line-height: 1.05;
+      color: var(--white); margin-bottom: 20px;
+    }
+    .hero h1 em { color: var(--orange); font-style: normal; }
+    .hero p {
+      font-size: 17px; color: #9ca3af; line-height: 1.7;
+      margin-bottom: 36px; max-width: 480px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--orange); color: var(--white);
+      padding: 14px 28px; border-radius: 8px;
+      font-size: 15px; font-weight: 700; text-decoration: none;
+      transition: background .2s, transform .15s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { background: var(--orange-dark); transform: translateY(-1px); }
+    .btn-outline {
+      border: 2px solid rgba(255,255,255,.25); color: var(--white);
+      padding: 14px 28px; border-radius: 8px;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      transition: border-color .2s, background .2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-outline:hover { border-color: var(--orange); background: rgba(249,115,22,.1); }
+    .hero-stats {
+      display: flex; gap: 28px; margin-top: 48px;
+      padding-top: 32px; border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .stat-item { text-align: left; }
+    .stat-num {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.2rem; font-weight: 700; color: var(--orange);
+    }
+    .stat-label { font-size: 12px; color: #9ca3af; margin-top: 2px; letter-spacing: .5px; }
+    .hero-visual {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .hero-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px; padding: 22px 24px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-card-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .hero-card-icon {
+      width: 40px; height: 40px; background: var(--orange);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    }
+    .hero-card-icon svg { width: 20px; height: 20px; fill: white; }
+    .hero-card h3 { font-size: 15px; font-weight: 700; color: var(--white); }
+    .hero-card p { font-size: 13px; color: #9ca3af; line-height: 1.5; }
+    .hero-card-row { display: flex; gap: 12px; }
+    .hero-card-row .hero-card { flex: 1; }
+
+    /* ── SECTIONS SHARED ── */
+    section { padding: 90px 5%; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--orange); font-size: 12px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-label::before { content: ''; width: 24px; height: 2px; background: var(--orange); }
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 700; line-height: 1.1; margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 16px; color: var(--slate); line-height: 1.7; max-width: 560px;
+    }
+    .section-header { margin-bottom: 52px; }
+    .section-header.center { text-align: center; }
+    .section-header.center .section-label { justify-content: center; }
+    .section-header.center .section-sub { margin: 0 auto; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      background: var(--orange);
+      padding: 20px 5%;
+    }
+    .trust-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--white); font-size: 14px; font-weight: 600;
+    }
+    .trust-item svg { width: 20px; height: 20px; fill: rgba(255,255,255,.8); flex-shrink: 0; }
+    .trust-divider { width: 1px; height: 28px; background: rgba(255,255,255,.3); }
+
+    /* ── SERVICES ── */
+    .services { background: var(--light); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 32px 28px;
+      border: 1px solid var(--border);
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 3px;
+      background: var(--orange);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .25s;
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.1); border-color: transparent; }
+    .service-card:hover::after { transform: scaleX(1); }
+    .service-icon {
+      width: 52px; height: 52px;
+      background: rgba(249,115,22,.1);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .service-icon svg { width: 26px; height: 26px; fill: var(--orange); }
+    .service-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .service-card p { font-size: 14px; color: var(--slate); line-height: 1.6; }
+    .service-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--orange); font-size: 13px; font-weight: 600;
+      text-decoration: none; margin-top: 18px;
+      transition: gap .2s;
+    }
+    .service-link:hover { gap: 10px; }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+    }
+    .about-img-wrap { position: relative; }
+    .about-img-box {
+      background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=900&q=80');
+      background-size: cover;
+      background-position: center;
+      border-radius: 18px;
+      height: 420px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .about-img-box svg { display: none; }
+    .about-badge {
+      position: absolute; bottom: -20px; right: -20px;
+      background: var(--orange);
+      border-radius: 14px; padding: 20px 24px;
+      text-align: center; color: var(--white);
+      box-shadow: 0 8px 24px rgba(249,115,22,.4);
+    }
+    .about-badge .num {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.4rem; font-weight: 700; display: block;
+    }
+    .about-badge .lbl { font-size: 12px; font-weight: 600; letter-spacing: .5px; }
+    .about-text .section-sub { margin-bottom: 32px; }
+    .about-checks { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
+    .check-item {
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .check-icon {
+      width: 22px; height: 22px; background: var(--orange);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .check-icon svg { width: 11px; height: 11px; fill: white; }
+    .check-item p { font-size: 15px; color: var(--charcoal); font-weight: 500; }
+
+    /* ── WHY US ── */
+    .why { background: var(--charcoal); }
+    .why .section-title { color: var(--white); }
+    .why .section-sub { color: #9ca3af; }
+    .why-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    }
+    .why-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 14px; padding: 32px 28px;
+      transition: background .2s;
+    }
+    .why-card:hover { background: rgba(249,115,22,.1); border-color: rgba(249,115,22,.3); }
+    .why-num {
+      font-family: 'Oswald', sans-serif;
+      font-size: 3rem; font-weight: 700;
+      color: rgba(249,115,22,.25); margin-bottom: 16px;
+    }
+    .why-card h3 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+    .why-card p { font-size: 14px; color: #9ca3af; line-height: 1.65; }
+
+    /* ── BLOG ── */
+    .blog { background: var(--light); }
+    .blog-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    }
+    .blog-card {
+      background: var(--white);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .blog-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.09); }
+    .blog-card-img {
+      height: 190px;
+      background: var(--charcoal);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .blog-card-img svg { width: 60px; height: 60px; fill: rgba(249,115,22,.4); }
+    .blog-card-img .blog-tag {
+      position: absolute; top: 14px; left: 14px;
+      background: var(--orange); color: white;
+      font-size: 11px; font-weight: 700; letter-spacing: .5px;
+      padding: 4px 10px; border-radius: 99px; text-transform: uppercase;
+    }
+    .blog-card-body { padding: 24px; }
+    .blog-meta {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--slate);
+      margin-bottom: 12px;
+    }
+    .blog-meta span { display: flex; align-items: center; gap: 4px; }
+    .blog-meta .dot { width: 3px; height: 3px; background: var(--slate); border-radius: 50%; }
+    .blog-card h3 {
+      font-size: 17px; font-weight: 700; line-height: 1.35;
+      margin-bottom: 10px; color: var(--charcoal);
+    }
+    .blog-card p { font-size: 14px; color: var(--slate); line-height: 1.6; margin-bottom: 18px; }
+    .blog-read-more {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--orange); font-size: 13px; font-weight: 700;
+      text-decoration: none; transition: gap .2s;
+    }
+    .blog-read-more:hover { gap: 10px; }
+    .blog-header-row {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 52px; flex-wrap: wrap; gap: 16px;
+    }
+    .blog-all-link {
+      color: var(--orange); font-size: 14px; font-weight: 600;
+      text-decoration: none; display: flex; align-items: center; gap: 6px;
+      border: 2px solid var(--orange); padding: 10px 20px; border-radius: 8px;
+      transition: background .2s, color .2s;
+    }
+    .blog-all-link:hover { background: var(--orange); color: white; }
+
+    /* ── CTA ── */
+    .cta {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+      text-align: center; padding: 80px 5%;
+    }
+    .cta h2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700; color: white; margin-bottom: 14px;
+    }
+    .cta p { font-size: 16px; color: rgba(255,255,255,.85); margin-bottom: 36px; max-width: 520px; margin-left: auto; margin-right: auto; }
+    .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-white {
+      background: white; color: var(--orange);
+      padding: 14px 30px; border-radius: 8px;
+      font-size: 15px; font-weight: 700; text-decoration: none;
+      transition: background .2s, transform .15s;
+    }
+    .btn-white:hover { background: #f5f5f5; transform: translateY(-1px); }
+    .btn-outline-white {
+      border: 2px solid rgba(255,255,255,.7); color: white;
+      padding: 14px 30px; border-radius: 8px;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-outline-white:hover { border-color: white; background: rgba(255,255,255,.12); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--charcoal);
+      color: #9ca3af;
+      padding: 64px 5% 28px;
+    }
+    .footer-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1.2fr; gap: 48px;
+      padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.08);
+      margin-bottom: 28px;
+    }
+    .footer-brand p { font-size: 14px; line-height: 1.7; margin-top: 14px; margin-bottom: 20px; }
+    .footer-social { display: flex; gap: 10px; }
+    .social-btn {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.07);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; transition: background .2s;
+    }
+    .social-btn:hover { background: var(--orange); }
+    .social-btn svg { width: 16px; height: 16px; fill: white; }
+    footer h4 {
+      color: white; font-size: 14px; font-weight: 700;
+      margin-bottom: 18px; letter-spacing: .5px;
+    }
+    footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    footer ul li a {
+      color: #9ca3af; text-decoration: none; font-size: 14px;
+      transition: color .2s;
+    }
+    footer ul li a:hover { color: var(--orange); }
+    .footer-contact-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14px; margin-bottom: 12px;
+    }
+    .footer-contact-item svg { width: 16px; height: 16px; fill: var(--orange); flex-shrink: 0; margin-top: 2px; }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 13px; }
+    .footer-bottom-links { display: flex; gap: 20px; }
+    .footer-bottom-links a { color: #9ca3af; text-decoration: none; font-size: 13px; transition: color .2s; }
+    .footer-bottom-links a:hover { color: var(--orange); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8zm-5.5 5.5L11 15l1.5 1.5L11 18l1.5 1.5L14 18l-1.5-1.5L14 15l-1.5-1.5z"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <span>Missouri Construction</span>
+      <span>Service — St. Louis, MO</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="/" class="active">Home</a>
+    <a href="/about">About</a>
+    <a href="/services">Services</a>
+    <a href="/portfolio">Portfolio</a>
+    <a href="/blog">Blog</a>
+    <a href="/contact">Contact</a>
+    <a href="/blog">Blog</a>
+    <a href="/contact" class="nav-cta">Request Quote</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-accent-2"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">Serving Missouri for 25+ Years</div>
+      <h1>Building <em>Dreams,</em><br>Restoring Homes</h1>
+      <p>Licensed contractors delivering quality craftsmanship across St. Louis and Missouri — from complete renovations to roofing, plumbing, and everything in between.</p>
+      <div class="hero-btns">
+        <a href="/contact" class="btn-primary">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:white"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Get Free Quote
+        </a>
+        <a href="tel:6362524203" class="btn-outline">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:white"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          (636) 252-4203
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">25+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">500+</div>
+          <div class="stat-label">Projects Done</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Licensed & Insured</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <div class="hero-card-icon">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          </div>
+          <div>
+            <h3>General Contracting</h3>
+            <p>Full project management, start to finish</p>
+          </div>
+        </div>
+      </div>
+      <div class="hero-card-row">
+        <div class="hero-card">
+          <div class="hero-card-icon" style="margin-bottom:12px">
+            <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3z"/></svg>
+          </div>
+          <h3 style="color:white;font-size:14px;margin-bottom:4px">Remodeling</h3>
+          <p style="color:#9ca3af;font-size:12px">Kitchens & Baths</p>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-icon" style="margin-bottom:12px">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          </div>
+          <h3 style="color:white;font-size:14px;margin-bottom:4px">Property Rehab</h3>
+          <p style="color:#9ca3af;font-size:12px">Full Restoration</p>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <div class="hero-card-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
+          <div>
+            <h3>Licensed & Insured</h3>
+            <p style="color:#9ca3af;font-size:13px">All work backed by our quality guarantee</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+      Licensed & Insured
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      Free Estimates
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+      On-Time Completion
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.35-2.08 6.53-5 7.93-2.92-1.4-5-4.58-5-7.93V7.18L12 5z"/></svg>
+      Quality Guaranteed
+    </div>
+    <div class="trust-divider"></div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      (636) 252-4203
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-label">What We Do</div>
+      <h2 class="section-title">Comprehensive Construction Services</h2>
+      <p class="section-sub">From small repairs to complete renovations, we've got Missouri covered with 25+ years of trusted expertise.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </div>
+        <h3>General Contracting</h3>
+        <p>Complete project management from planning to completion with licensed professionals. We handle everything so you don't have to.</p>
+        <a href="/services" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 6.5l-4-4-8.5 8.5-2 4 4-2L21 6.5zm-14 7l-1.5 3 3-1.5L21 3.5l-1.5-1.5L7 13.5z"/></svg>
+        </div>
+        <h3>Remodeling</h3>
+        <p>Transform your space with expert kitchen, bathroom, and full home remodeling. Custom designs that fit your style and budget.</p>
+        <a href="/services" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v9h6v-5h2v5h6v-9h3L12 3zm0 12.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </div>
+        <h3>Roofing</h3>
+        <p>Professional installation, repair, and maintenance to protect your home or commercial property from the elements.</p>
+        <a href="/services" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+        </div>
+        <h3>Plumbing</h3>
+        <p>Licensed plumbing services for installations, repairs, and emergency situations. Available when you need us most.</p>
+        <a href="/services" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+        </div>
+        <h3>Electrical</h3>
+        <p>Certified electrical work including wiring, panel upgrades, and safety inspections by licensed electricians.</p>
+        <a href="/services" class="service-link">Learn more →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        </div>
+        <h3>Property Rehabs</h3>
+        <p>Complete rehabilitation services to restore and modernize older buildings — residential and commercial.</p>
+        <a href="/services" class="service-link">Learn more →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section style="padding: 90px 5%; background: white;">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap">
+        <div class="about-img-box">
+          <svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg>
+        </div>
+        <div class="about-badge">
+          <span class="num">500+</span>
+          <span class="lbl">Projects Completed</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <div class="section-label">About Us</div>
+        <h2 class="section-title">Missouri's Trusted<br>Construction Partner</h2>
+        <p class="section-sub">With over 25 years of experience, Missouri Construction Service has built a reputation for quality, reliability, and honest pricing across the St. Louis area and beyond.</p>
+        <div class="about-checks">
+          <div class="check-item">
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <p>Fully licensed, bonded, and insured in Missouri</p>
+          </div>
+          <div class="check-item">
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <p>Free detailed estimates with no hidden fees</p>
+          </div>
+          <div class="check-item">
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <p>On-time, on-budget project delivery — guaranteed</p>
+          </div>
+          <div class="check-item">
+            <div class="check-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <p>Serving residential & commercial clients since 1999</p>
+          </div>
+        </div>
+        <a href="/about" class="btn-primary">Learn More About Us →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="why">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-label" style="color:var(--orange)">Why Choose Us</div>
+      <h2 class="section-title">Missouri's Preferred<br>Construction Company</h2>
+      <p class="section-sub">Our commitment to excellence has made us the go-to choice for homeowners and businesses across Missouri.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-num">01</div>
+        <h3>Quality Craftsmanship</h3>
+        <p>We take pride in delivering exceptional workmanship on every project, big or small. Our skilled team holds their work to the highest standard.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-num">02</div>
+        <h3>On-Time Delivery</h3>
+        <p>We respect your time and complete projects within the agreed timeline. Our project management systems keep everything on track.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-num">03</div>
+        <h3>Transparent Pricing</h3>
+        <p>No surprises, no hidden fees. You get a detailed quote upfront and we stick to it — your budget is as important to us as the finished product.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="blog">
+  <div class="container">
+    <div class="blog-header-row">
+      <div>
+        <div class="section-label">From Our Blog</div>
+        <h2 class="section-title">Construction Tips &<br>Industry Insights</h2>
+      </div>
+      <a href="/blog" class="blog-all-link">View All Articles →</a>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card">
+        <div class="blog-card-img" style="background-image: url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=600&q=80'); background-size:cover; background-position:center;">
+          <span class="blog-tag">Remodeling</span>
+        </div>
+        <div class="blog-card-body">
+          <div class="blog-meta">
+            <span>May 8, 2025</span>
+            <span class="dot"></span>
+            <span>5 min read</span>
+          </div>
+          <h3>5 Kitchen Remodel Mistakes Missouri Homeowners Make</h3>
+          <p>Avoid these costly errors before starting your kitchen renovation — from skipping permits to underestimating timelines.</p>
+          <a href="/blog" class="blog-read-more">Read Article →</a>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-card-img" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80'); background-size:cover; background-position:center;">
+          <span class="blog-tag">Roofing</span>
+        </div>
+        <div class="blog-card-body">
+          <div class="blog-meta">
+            <span>Apr 22, 2025</span>
+            <span class="dot"></span>
+            <span>4 min read</span>
+          </div>
+          <h3>When to Repair vs. Replace Your Roof in Missouri</h3>
+          <p>Missouri's extreme weather takes a toll on roofs. Here's how to tell when a repair is enough — and when it's time for a full replacement.</p>
+          <a href="/blog" class="blog-read-more">Read Article →</a>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-card-img" style="background-image: url('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80'); background-size:cover; background-position:center;">
+          <span class="blog-tag">Electrical</span>
+        </div>
+        <div class="blog-card-body">
+          <div class="blog-meta">
+            <span>Apr 10, 2025</span>
+            <span class="dot"></span>
+            <span>3 min read</span>
+          </div>
+          <h3>Signs Your Home's Electrical Panel Needs an Upgrade</h3>
+          <p>Flickering lights, tripped breakers, and outdated wiring are red flags. Learn what to watch for and when to call a licensed electrician.</p>
+          <a href="/blog" class="blog-read-more">Read Article →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section style="background:white;padding:90px 5%;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:52px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;color:var(--orange);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">
+        <span style="width:24px;height:2px;background:var(--orange);display:inline-block;"></span>Client Reviews
+      </div>
+      <h2 style="font-family:'Oswald',sans-serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:700;margin-bottom:14px;">What Missouri Homeowners Say</h2>
+      <p style="font-size:16px;color:#6b7280;max-width:520px;margin:0 auto;line-height:1.7;">Hundreds of satisfied clients across St. Louis and Missouri. Here's what a few of them had to say.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:40px;">
+      <div style="background:#f5f5f5;border-radius:14px;padding:28px;border:1px solid #e5e7eb;">
+        <div style="display:flex;gap:3px;margin-bottom:14px;">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        </div>
+        <p style="font-size:14px;color:#6b7280;line-height:1.7;margin-bottom:20px;font-style:italic;">"MCS completely transformed our kitchen. The team was professional, clean, and finished 3 days ahead of schedule. Couldn't be happier."</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:42px;height:42px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white;flex-shrink:0;">J</div>
+          <div><div style="font-size:14px;font-weight:700;">Jennifer R.</div><div style="font-size:12px;color:#6b7280;">St. Louis, MO</div></div>
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:14px;padding:28px;border:1px solid #e5e7eb;">
+        <div style="display:flex;gap:3px;margin-bottom:14px;">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        </div>
+        <p style="font-size:14px;color:#6b7280;line-height:1.7;margin-bottom:20px;font-style:italic;">"New roof installed in 2 days. Great price, zero mess, and they caught rotted decking that saved us from a much bigger problem down the road."</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:42px;height:42px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white;flex-shrink:0;">T</div>
+          <div><div style="font-size:14px;font-weight:700;">Tom & Lisa K.</div><div style="font-size:12px;color:#6b7280;">Chesterfield, MO</div></div>
+        </div>
+      </div>
+      <div style="background:#f5f5f5;border-radius:14px;padding:28px;border:1px solid #e5e7eb;">
+        <div style="display:flex;gap:3px;margin-bottom:14px;">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        </div>
+        <p style="font-size:14px;color:#6b7280;line-height:1.7;margin-bottom:20px;font-style:italic;">"Hired MCS for a complete property rehab on a rental. They handled everything — roof, plumbing, electrical, drywall. Turned out absolutely amazing."</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:42px;height:42px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white;flex-shrink:0;">R</div>
+          <div><div style="font-size:14px;font-weight:700;">Robert A.</div><div style="font-size:12px;color:#6b7280;">Ballwin, MO</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <a href="/about" style="color:var(--orange);font-size:14px;font-weight:600;text-decoration:none;">Read more reviews on our About page →</a>
+    </div>
+  </div>
+</section>
+
+<!-- MID-PAGE CTA STRIP -->
+<div style="background:var(--charcoal);padding:36px 5%;">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+    <div>
+      <h3 style="font-family:'Oswald',sans-serif;font-size:1.5rem;font-weight:700;color:white;">Have an emergency? We're available now.</h3>
+      <p style="font-size:14px;color:#9ca3af;margin-top:4px;">Burst pipe, storm damage, electrical issue — call us directly, 24/7.</p>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="tel:6362524203" class="btn-primary">📞 Call (636) 252-4203</a>
+      <a href="/contact" class="btn-outline">Request a Quote</a>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Ready to Start Your Project?</h2>
+  <p>Contact us today for a free consultation and quote. Let's bring your vision to life with expert craftsmanship and reliable service.</p>
+  <div class="cta-btns">
+    <a href="/contact" class="btn-white">Request Free Quote</a>
+    <a href="tel:6362524203" class="btn-outline-white">📞 (636) 252-4203</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo" style="margin-bottom:4px">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span>Missouri Construction</span>
+          <span>Service — St. Louis, MO</span>
+        </div>
+      </a>
+      <p>Your trusted partner in construction and renovation across Missouri. Quality craftsmanship, reliable timelines, and honest pricing since 1999.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn" title="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="#" class="social-btn" title="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="#1c1c1e"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="#1c1c1e" stroke-width="2"/></svg>
+        </a>
+        <a href="#" class="social-btn" title="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul>
+        <li><a href="/services">General Contracting</a></li>
+        <li><a href="/services">Remodeling</a></li>
+        <li><a href="/services">Roofing</a></li>
+        <li><a href="/services">Plumbing</a></li>
+        <li><a href="/services">Electrical</a></li>
+        <li><a href="/services">Property Rehabs</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/portfolio">Portfolio</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <div class="footer-contact-item">
+        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        (636) 252-4203
+      </div>
+      <div class="footer-contact-item">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        info@missouriconstructionservice.com
+      </div>
+      <div class="footer-contact-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        St. Louis, MO
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Missouri Construction Service. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

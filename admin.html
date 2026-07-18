@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Missouri Construction Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--orange:#f97316;--od:#ea6c09;--dark:#1c1c1e;--dark2:#2d2d2f;--slate:#6b7280;--light:#f5f5f5;--white:#fff;--border:#e5e7eb;--green:#16a34a;--red:#dc2626;--blue:#2563eb}
+    html,body{height:100%;font-family:'Inter',sans-serif;color:var(--dark);background:var(--light);font-size:14px}
+    a{text-decoration:none;color:inherit}
+    /* Layout */
+    .layout{display:flex;height:100vh;overflow:hidden}
+    /* Sidebar */
+    .sidebar{width:220px;background:var(--dark);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+    .sb-brand{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+    .sb-icon{width:36px;height:36px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .sb-icon svg{width:20px;height:20px;fill:#fff}
+    .sb-name{font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.1}
+    .sb-sub{font-size:10px;color:var(--orange);letter-spacing:1px;text-transform:uppercase}
+    .sb-label{padding:16px 16px 6px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#4b5563}
+    .sb-nav{list-style:none;padding:0 8px}
+    .sb-nav li{margin-bottom:2px}
+    .sb-nav a{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:7px;color:#9ca3af;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+    .sb-nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+    .sb-nav a.active{background:var(--orange);color:#fff}
+    .sb-nav svg{width:15px;height:15px;fill:currentColor;flex-shrink:0}
+    .sb-footer{margin-top:auto;padding:14px 16px;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:8px}
+    .sb-footer a{display:flex;align-items:center;gap:8px;color:#9ca3af;font-size:12px;transition:color .15s}
+    .sb-footer a:hover{color:var(--orange)}
+    .sb-footer svg{width:14px;height:14px;fill:currentColor}
+    /* Main */
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+    .topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+    .topbar-left{display:flex;align-items:center;gap:14px}
+    .topbar h1{font-size:17px;font-weight:700}
+    .topbar-right{display:flex;align-items:center;gap:10px}
+    .content{flex:1;overflow-y:auto;padding:24px 28px}
+    /* Buttons */
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s}
+    .btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--od)}
+    .btn-danger{background:var(--red);color:#fff}.btn-danger:hover{background:#b91c1c}
+    .btn-ghost{background:transparent;color:var(--slate);border:1.5px solid var(--border)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+    .btn-sm{padding:5px 12px;font-size:12px}
+    .btn-icon{width:32px;height:32px;padding:0;justify-content:center;border-radius:7px}
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px}
+    .stat-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:18px 20px}
+    .stat-card .lbl{font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+    .stat-card .val{font-family:'Oswald',sans-serif;font-size:1.9rem;font-weight:700;color:var(--dark)}
+    .stat-card .sub{font-size:11px;color:var(--slate);margin-top:3px}
+    .stat-card.hl{border-color:var(--orange);background:rgba(249,115,22,.04)}.stat-card.hl .val{color:var(--orange)}
+    /* Cards */
+    .card{background:#fff;border-radius:12px;border:1px solid var(--border);overflow:hidden}
+    .card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .card-header h2{font-size:15px;font-weight:700}
+    .card-body{padding:20px}
+    /* Tables */
+    .tbl-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    thead{background:var(--light)}
+    th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+    td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+    tr:last-child td{border-bottom:0}
+    tr:hover td{background:rgba(249,115,22,.02)}
+    .td-bold{font-weight:600}
+    .td-muted{color:var(--slate);font-size:12px}
+    .td-actions{display:flex;gap:6px}
+    /* Badges */
+    .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700}
+    .badge-new{background:#eff6ff;color:var(--blue)}
+    .badge-published{background:#f0fdf4;color:var(--green)}
+    .badge-draft{background:var(--light);color:var(--slate)}
+    .badge-active{background:#f0fdf4;color:var(--green)}
+    .badge-hidden{background:var(--light);color:var(--slate)}
+    .badge-contacted{background:#fefce8;color:#854d0e}
+    .badge-quoted{background:#f0fdf4;color:var(--green)}
+    .badge-closed{background:var(--light);color:var(--slate)}
+    .badge-orange{background:rgba(249,115,22,.1);color:var(--orange)}
+    /* Status select */
+    .status-sel{padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-size:11px;font-family:inherit;outline:none;cursor:pointer;background:#fff}
+    /* Tabs */
+    .tab-row{display:flex;gap:4px;background:var(--light);border-radius:10px;padding:4px;width:fit-content;margin-bottom:18px}
+    .tab-pill{padding:7px 16px;border-radius:7px;font-size:12px;font-weight:600;border:none;background:transparent;cursor:pointer;color:var(--slate);font-family:inherit;transition:all .15s}
+    .tab-pill.active{background:#fff;color:var(--dark);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+    /* Empty state */
+    .empty{text-align:center;padding:48px 20px;color:var(--slate)}
+    .empty svg{width:40px;height:40px;fill:#d1d5db;display:block;margin:0 auto 12px}
+    /* Grid for projects */
+    .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .proj-card{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:box-shadow .15s}
+    .proj-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+    .proj-thumb{height:150px;background:var(--dark2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .proj-thumb img{width:100%;height:100%;object-fit:cover}
+    .proj-thumb-placeholder svg{width:40px;height:40px;fill:rgba(249,115,22,.3)}
+    .proj-info{padding:14px}
+    .proj-info h3{font-size:14px;font-weight:700;margin-bottom:4px}
+    .proj-meta{font-size:12px;color:var(--slate);margin-bottom:10px}
+    .proj-actions{display:flex;gap:6px}
+    /* Recent list */
+    .recent-list{display:flex;flex-direction:column;gap:0}
+    .recent-item{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border)}
+    .recent-item:last-child{border-bottom:0}
+    .recent-name{font-weight:600;font-size:13px}
+    .recent-meta{font-size:12px;color:var(--slate)}
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+    .modal-overlay.open{display:flex}
+    .modal{background:#fff;border-radius:16px;width:100%;max-width:720px;box-shadow:0 24px 64px rgba(0,0,0,.2);flex-shrink:0}
+    .modal-lg{max-width:900px}
+    .modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .modal-header h2{font-size:16px;font-weight:700}
+    .modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--slate);width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+    .modal-close:hover{background:var(--light);color:var(--dark)}
+    .modal-body{padding:24px}
+    .modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;gap:10px}
+    /* Form */
+    .form-group{margin-bottom:18px}
+    .form-group label{display:block;font-size:12px;font-weight:700;color:var(--dark);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--dark);outline:none;transition:border-color .15s,box-shadow .15s;background:#fff}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(249,115,22,.1)}
+    .form-group textarea{resize:vertical;min-height:90px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    .required{color:var(--orange)}
+    /* Image upload */
+    .img-upload{border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
+    .img-upload:hover{border-color:var(--orange);background:rgba(249,115,22,.02)}
+    .img-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .img-upload svg{width:32px;height:32px;fill:#d1d5db;display:block;margin:0 auto 8px}
+    .img-upload p{font-size:13px;color:var(--slate)}
+    .img-upload span{font-size:12px;color:#9ca3af}
+    .img-preview{position:relative;border-radius:8px;overflow:hidden;margin-top:10px}
+    .img-preview img{width:100%;height:160px;object-fit:cover;display:block}
+    .img-preview-remove{position:absolute;top:8px;right:8px;width:26px;height:26px;background:rgba(0,0,0,.6);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+    /* Image gallery */
+    .img-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+    .img-gallery-item{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1}
+    .img-gallery-item img{width:100%;height:100%;object-fit:cover}
+    .img-gallery-remove{position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,.6);border-radius:50%;border:none;cursor:pointer;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center}
+    /* Quill */
+    .ql-container{font-family:'Inter',sans-serif!important;font-size:14px}
+    .ql-editor{min-height:200px}
+    /* Toast */
+    .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+    .toast{background:var(--dark);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);animation:slideIn .25s ease;display:flex;align-items:center;gap:8px}
+    .toast.success{background:var(--green)}
+    .toast.error{background:var(--red)}
+    @keyframes slideIn{from{transform:translateX(100px);opacity:0}to{transform:none;opacity:1}}
+    /* Confirm modal */
+    .confirm-modal{max-width:400px;text-align:center}
+    .confirm-modal .modal-body{padding:32px 24px}
+    .confirm-modal .confirm-icon{width:52px;height:52px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+    .confirm-modal .confirm-icon svg{width:26px;height:26px;fill:var(--red)}
+    .confirm-modal h3{font-size:17px;font-weight:700;margin-bottom:8px}
+    .confirm-modal p{font-size:13px;color:var(--slate);line-height:1.6}
+    /* Stars */
+    .stars-input{display:flex;gap:4px}
+    .stars-input span{font-size:22px;cursor:pointer;color:#d1d5db;transition:color .1s}
+    .stars-input span.filled{color:#f59e0b}
+    /* Views */
+    .view{display:none}.view.active{display:block}
+    /* Upload spinner */
+    .uploading{opacity:.6;pointer-events:none}
+    /* Settings */
+    .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .settings-section{background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px}
+    .settings-section h3{font-size:15px;font-weight:700;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div>
+    <div><div class="sb-name">MCS Admin</div><div class="sb-sub">Dashboard</div></div>
+  </div>
+  <div class="sb-label">Overview</div>
+  <ul class="sb-nav">
+    <li><a onclick="showView('dashboard')" id="nav-dashboard" class="active"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>Dashboard</a></li>
+  </ul>
+  <div class="sb-label">Content</div>
+  <ul class="sb-nav">
+    <li><a onclick="showView('blog')" id="nav-blog"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM9 13h6v2H9zm0-4h3v2H9zm0 8h6v2H9z"/></svg>Blog Posts</a></li>
+    <li><a onclick="showView('projects')" id="nav-projects"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Projects</a></li>
+    <li><a onclick="showView('testimonials')" id="nav-testimonials"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>Testimonials</a></li>
+  </ul>
+  <div class="sb-label">Leads</div>
+  <ul class="sb-nav">
+    <li><a onclick="showView('inquiries')" id="nav-inquiries"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Inquiries</a></li>
+    <li><a onclick="showView('quotes')" id="nav-quotes"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>Quote Requests</a></li>
+  </ul>
+  <div class="sb-label">System</div>
+  <ul class="sb-nav">
+    <li><a onclick="showView('settings')" id="nav-settings"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>Settings</a></li>
+  </ul>
+  <div class="sb-footer">
+    <a href="/" target="_blank"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>View Website</a>
+    <a href="#" onclick="signOut(event)"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>Sign Out</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left"><h1 id="topbar-title">Dashboard</h1></div>
+    <div class="topbar-right">
+      <span id="topbar-time" style="font-size:12px;color:var(--slate)"></span>
+      <button class="btn btn-ghost btn-sm" onclick="refreshCurrent()">↻ Refresh</button>
+      <button class="btn btn-primary btn-sm" id="topbar-action" style="display:none" onclick="topbarAction()"></button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div id="view-dashboard" class="view active">
+      <div class="stats-grid" id="dash-stats">
+        <div class="stat-card hl"><div class="lbl">New Inquiries</div><div class="val" id="ds-inq-new">—</div><div class="sub">Awaiting response</div></div>
+        <div class="stat-card hl"><div class="lbl">New Quotes</div><div class="val" id="ds-q-new">—</div><div class="sub">Awaiting estimate</div></div>
+        <div class="stat-card"><div class="lbl">Blog Posts</div><div class="val" id="ds-blog">—</div><div class="sub" id="ds-blog-sub"></div></div>
+        <div class="stat-card"><div class="lbl">Projects</div><div class="val" id="ds-proj">—</div><div class="sub" id="ds-proj-sub"></div></div>
+        <div class="stat-card"><div class="lbl">Testimonials</div><div class="val" id="ds-test">—</div><div class="sub" id="ds-test-sub"></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="card">
+          <div class="card-header"><h2>Recent Inquiries</h2><a onclick="showView('inquiries')" class="btn btn-ghost btn-sm">View All</a></div>
+          <div class="card-body" style="padding:0"><div id="dash-inq-list" class="recent-list" style="padding:0 20px"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2>Recent Quote Requests</h2><a onclick="showView('quotes')" class="btn btn-ghost btn-sm">View All</a></div>
+          <div class="card-body" style="padding:0"><div id="dash-quote-list" class="recent-list" style="padding:0 20px"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOG -->
+    <div id="view-blog" class="view">
+      <div class="tab-row">
+        <button class="tab-pill active" onclick="filterBlog('all',this)">All</button>
+        <button class="tab-pill" onclick="filterBlog('published',this)">Published</button>
+        <button class="tab-pill" onclick="filterBlog('draft',this)">Drafts</button>
+      </div>
+      <div class="card">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="blog-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div id="view-projects" class="view">
+      <div id="proj-grid" class="proj-grid"></div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div id="view-testimonials" class="view">
+      <div class="card">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Location</th><th>Rating</th><th>Review</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="test-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- INQUIRIES -->
+    <div id="view-inquiries" class="view">
+      <div class="tab-row">
+        <button class="tab-pill active" onclick="filterInq('all',this)">All</button>
+        <button class="tab-pill" onclick="filterInq('new',this)">New</button>
+        <button class="tab-pill" onclick="filterInq('contacted',this)">Contacted</button>
+        <button class="tab-pill" onclick="filterInq('quoted',this)">Quoted</button>
+        <button class="tab-pill" onclick="filterInq('closed',this)">Closed</button>
+      </div>
+      <div class="card">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Contact</th><th>Service</th><th>Message</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody id="inq-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUOTES -->
+    <div id="view-quotes" class="view">
+      <div class="card">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Contact</th><th>Service</th><th>Timeline</th><th>Budget</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody id="quote-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="view-settings" class="view">
+      <div class="settings-grid">
+        <div class="settings-section">
+          <h3>Business Information</h3>
+          <div class="form-group"><label>Phone Number</label><input type="text" id="set-phone" placeholder="(636) 252-4203" /></div>
+          <div class="form-group"><label>Email Address</label><input type="email" id="set-email" placeholder="info@example.com" /></div>
+          <div class="form-group"><label>Address / Service Area</label><input type="text" id="set-address" placeholder="St. Louis, MO" /></div>
+          <div class="form-group"><label>Weekday Hours</label><input type="text" id="set-hours-weekday" placeholder="Monday – Friday: 7:00am – 6:00pm" /></div>
+          <div class="form-group"><label>Weekend Hours</label><input type="text" id="set-hours-weekend" placeholder="Saturday: 8:00am – 4:00pm" /></div>
+          <button class="btn btn-primary" onclick="saveSettings()">Save Business Info</button>
+        </div>
+        <div>
+          <div class="settings-section" style="margin-bottom:20px">
+            <h3>Change Admin Password</h3>
+            <p style="font-size:13px;color:var(--slate);margin-bottom:16px">Edit <code>admin.php</code> on your server and update the <code>ADMIN_PASSWORD</code> constant.</p>
+            <div style="background:var(--light);border-radius:8px;padding:12px;font-family:monospace;font-size:12px;color:var(--dark)">define('ADMIN_PASSWORD', 'your-new-password');</div>
+          </div>
+          <div class="settings-section">
+            <h3>Change Site Password</h3>
+            <p style="font-size:13px;color:var(--slate);margin-bottom:16px">Edit <code>siteprotect.php</code> on your server and update the <code>SITE_PASSWORD</code> constant. To disable site protection, remove the 5 TEMP lines from <code>.htaccess</code>.</p>
+            <div style="background:var(--light);border-radius:8px;padding:12px;font-family:monospace;font-size:12px;color:var(--dark)">define('SITE_PASSWORD', 'your-new-password');</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- TOAST CONTAINER -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- BLOG MODAL -->
+<div class="modal-overlay" id="blog-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h2 id="blog-modal-title">New Blog Post</h2>
+      <button class="modal-close" onclick="closeModal('blog-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="blog-id" />
+      <div class="form-row">
+        <div class="form-group" style="grid-column:span 2"><label>Title <span class="required">*</span></label><input type="text" id="blog-title" placeholder="Enter post title" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Category</label>
+          <select id="blog-category">
+            <option value="">— Select —</option>
+            <option>Remodeling</option><option>Roofing</option><option>Electrical</option>
+            <option>Plumbing</option><option>Property Rehab</option><option>General Contracting</option><option>Tips & Advice</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Status</label>
+          <select id="blog-status"><option value="draft">Draft</option><option value="published">Published</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label>Excerpt</label><textarea id="blog-excerpt" placeholder="Short summary shown in blog listing..." style="min-height:70px"></textarea></div>
+      <div class="form-group"><label>Featured Image</label>
+        <div class="img-upload" id="blog-img-drop">
+          <input type="file" accept="image/*" onchange="uploadImg(this,'blog','blog-img-preview','blog-featured-image')" />
+          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          <p>Click or drag to upload image</p>
+          <span>JPG, PNG, WebP — max 8MB</span>
+        </div>
+        <div class="img-preview" id="blog-img-preview" style="display:none">
+          <img id="blog-img-preview-img" src="" alt="" />
+          <button class="img-preview-remove" onclick="removeImg('blog-img-preview','blog-featured-image')">✕</button>
+        </div>
+        <input type="hidden" id="blog-featured-image" />
+      </div>
+      <div class="form-group"><label>Content <span class="required">*</span></label>
+        <div id="blog-editor" style="border:1.5px solid var(--border);border-radius:8px;overflow:hidden"></div>
+      </div>
+      <div class="form-row" style="margin-top:6px">
+        <div class="form-group"><label>SEO Title</label><input type="text" id="blog-meta-title" placeholder="Leave blank to use post title" /></div>
+        <div class="form-group"><label>SEO Description</label><input type="text" id="blog-meta-desc" placeholder="Short description for search engines" /></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('blog-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveBlogPost()">Save Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT MODAL -->
+<div class="modal-overlay" id="proj-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h2 id="proj-modal-title">New Project</h2>
+      <button class="modal-close" onclick="closeModal('proj-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="proj-id" />
+      <div class="form-group"><label>Project Title <span class="required">*</span></label><input type="text" id="proj-title" placeholder="e.g. Chesterfield Kitchen Remodel" /></div>
+      <div class="form-row-3">
+        <div class="form-group"><label>Category</label>
+          <select id="proj-category">
+            <option value="">— Select —</option>
+            <option>Remodeling</option><option>Roofing</option><option>General Contracting</option>
+            <option>Property Rehab</option><option>Electrical</option><option>Plumbing</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Location</label><input type="text" id="proj-location" placeholder="e.g. Chesterfield, MO" /></div>
+        <div class="form-group"><label>Duration</label><input type="text" id="proj-duration" placeholder="e.g. 6 weeks" /></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="proj-desc" placeholder="Describe the project scope and outcome..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Status</label>
+          <select id="proj-status"><option value="active">Active (Visible)</option><option value="hidden">Hidden</option></select>
+        </div>
+        <div class="form-group"><label>Sort Order</label><input type="number" id="proj-sort" value="0" min="0" /></div>
+      </div>
+      <div class="form-group"><label>Featured Image</label>
+        <div class="img-upload">
+          <input type="file" accept="image/*" onchange="uploadImg(this,'project','proj-img-preview','proj-featured-image')" />
+          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          <p>Click to upload featured image</p><span>JPG, PNG, WebP — max 8MB</span>
+        </div>
+        <div class="img-preview" id="proj-img-preview" style="display:none">
+          <img id="proj-img-preview-img" src="" alt="" />
+          <button class="img-preview-remove" onclick="removeImg('proj-img-preview','proj-featured-image')">✕</button>
+        </div>
+        <input type="hidden" id="proj-featured-image" />
+      </div>
+      <div class="form-group"><label>Additional Images</label>
+        <div class="img-upload">
+          <input type="file" accept="image/*" multiple onchange="uploadMultiImg(this,'project')" />
+          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          <p>Add gallery images (multi-select allowed)</p><span>JPG, PNG, WebP — max 8MB each</span>
+        </div>
+        <div class="img-gallery" id="proj-gallery"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('proj-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIAL MODAL -->
+<div class="modal-overlay" id="test-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="test-modal-title">New Testimonial</h2>
+      <button class="modal-close" onclick="closeModal('test-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="test-id" />
+      <div class="form-row">
+        <div class="form-group"><label>Name <span class="required">*</span></label><input type="text" id="test-name" placeholder="Jennifer R." /></div>
+        <div class="form-group"><label>Location</label><input type="text" id="test-location" placeholder="St. Louis, MO" /></div>
+      </div>
+      <div class="form-group"><label>Star Rating</label>
+        <div class="stars-input" id="stars-input">
+          <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span>
+          <span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span><span onclick="setRating(5)">★</span>
+        </div>
+        <input type="hidden" id="test-rating" value="5" />
+      </div>
+      <div class="form-group"><label>Review <span class="required">*</span></label><textarea id="test-content" placeholder="What did the client say?" style="min-height:110px"></textarea></div>
+      <div class="form-group"><label>Status</label>
+        <select id="test-status"><option value="active">Active (Visible)</option><option value="hidden">Hidden</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('test-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTestimonial()">Save Testimonial</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal confirm-modal">
+    <div class="modal-body">
+      <div class="confirm-icon"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
+      <h3>Delete this item?</h3>
+      <p id="confirm-msg">This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer" style="justify-content:center;gap:12px">
+      <button class="btn btn-ghost" onclick="closeModal('confirm-modal')">Cancel</button>
+      <button class="btn btn-danger" id="confirm-ok">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script>
+// ─── State ───────────────────────────────────────────────────
+let currentView = 'dashboard';
+let allInquiries = [], allQuotes = [], blogFilter = 'all', inqFilter = 'all';
+let projImages = []; // additional project images
+let quill = null;
+let confirmCallback = null;
+
+// ─── Utils ───────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const fmtDate = d => new Date(d).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function toast(msg, type='success') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = (type==='success'?'✓ ':'✕ ') + esc(msg);
+  $('toast-wrap').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+async function api(url, opts={}) {
+  const res = await fetch(url, { headers: {'Content-Type':'application/json'}, ...opts });
+  if (res.status === 401) { window.location.href = '/admin-login'; return {}; }
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json.error || 'Request failed');
+  return json;
+}
+
+function badge(status) {
+  const map = {new:'badge-new',published:'badge-published',draft:'badge-draft',active:'badge-active',hidden:'badge-hidden',contacted:'badge-contacted',quoted:'badge-quoted',closed:'badge-closed'};
+  return `<span class="badge ${map[status]||'badge-draft'}">${status}</span>`;
+}
+
+function stars(n) {
+  return '★'.repeat(n) + '☆'.repeat(5-n);
+}
+
+function openModal(id) { $(id).classList.add('open'); }
+function closeModal(id) { $(id).classList.remove('open'); }
+
+function confirmDelete(msg, cb) {
+  $('confirm-msg').textContent = msg;
+  confirmCallback = cb;
+  openModal('confirm-modal');
+}
+$('confirm-ok').onclick = () => { closeModal('confirm-modal'); if(confirmCallback) confirmCallback(); };
+
+function updateTime() {
+  $('topbar-time').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+}
+
+// ─── Navigation ───────────────────────────────────────────────
+const viewTitles = { dashboard:'Dashboard', blog:'Blog Posts', projects:'Projects', testimonials:'Testimonials', inquiries:'Inquiries', quotes:'Quote Requests', settings:'Settings' };
+const viewLoaders = { dashboard:loadDashboard, blog:loadBlog, projects:loadProjects, testimonials:loadTestimonials, inquiries:loadInquiries, quotes:loadQuotes, settings:loadSettings };
+const topbarActions = { blog:['+ New Post', () => openBlogModal()], projects:['+ New Project', () => openProjModal()], testimonials:['+ New Testimonial', () => openTestModal()] };
+
+function showView(v) {
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.sb-nav a').forEach(el => el.classList.remove('active'));
+  $('view-' + v).classList.add('active');
+  $('nav-' + v).classList.add('active');
+  $('topbar-title').textContent = viewTitles[v] || v;
+  currentView = v;
+  const action = $('topbar-action');
+  if (topbarActions[v]) {
+    action.style.display = ''; action.textContent = topbarActions[v][0];
+  } else { action.style.display = 'none'; }
+  if (viewLoaders[v]) viewLoaders[v]();
+}
+
+function topbarAction() { if(topbarActions[currentView]) topbarActions[currentView][1](); }
+function refreshCurrent() { if(viewLoaders[currentView]) viewLoaders[currentView](); }
+
+// ─── Dashboard ───────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const d = await api('/api/admin/dashboard');
+    $('ds-inq-new').textContent = d.inquiries.new;
+    $('ds-q-new').textContent   = d.quotes.new;
+    $('ds-blog').textContent    = d.blog_posts.total;
+    $('ds-blog-sub').textContent = `${d.blog_posts.published} published · ${d.blog_posts.draft} draft`;
+    $('ds-proj').textContent    = d.projects.total;
+    $('ds-proj-sub').textContent = `${d.projects.active} active`;
+    $('ds-test').textContent    = d.testimonials.total;
+    $('ds-test-sub').textContent = `${d.testimonials.active} visible`;
+
+    $('dash-inq-list').innerHTML = d.recent_inquiries.length
+      ? d.recent_inquiries.map(r => `<div class="recent-item"><div><div class="recent-name">${esc(r.name)}</div><div class="recent-meta">${esc(r.service||'General')} · ${fmtDate(r.created_at)}</div></div>${badge(r.status)}</div>`).join('')
+      : '<div style="padding:20px;color:var(--slate);font-size:13px">No inquiries yet.</div>';
+
+    $('dash-quote-list').innerHTML = d.recent_quotes.length
+      ? d.recent_quotes.map(r => `<div class="recent-item"><div><div class="recent-name">${esc(r.name)}</div><div class="recent-meta">${esc(r.service)} · ${fmtDate(r.created_at)}</div></div>${badge(r.status)}</div>`).join('')
+      : '<div style="padding:20px;color:var(--slate);font-size:13px">No quote requests yet.</div>';
+    updateTime();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+// ─── Blog ─────────────────────────────────────────────────────
+let blogPosts = [];
+async function loadBlog() {
+  try {
+    const d = await api('/api/admin/blog');
+    blogPosts = d.posts || [];
+    renderBlog();
+    updateTime();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function filterBlog(f, btn) {
+  blogFilter = f;
+  document.querySelectorAll('#view-blog .tab-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBlog();
+}
+
+function renderBlog() {
+  const rows = blogFilter === 'all' ? blogPosts : blogPosts.filter(p => p.status === blogFilter);
+  $('blog-tbody').innerHTML = rows.length ? rows.map(p => `
+    <tr>
+      <td class="td-bold">${esc(p.title)}</td>
+      <td><span class="badge badge-orange">${esc(p.category||'—')}</span></td>
+      <td class="td-muted">${esc(p.author)}</td>
+      <td>${badge(p.status)}</td>
+      <td class="td-muted">${fmtDate(p.created_at)}</td>
+      <td class="td-actions">
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="openBlogModal(${p.id})" title="Edit">✏️</button>
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="toggleBlogStatus(${p.id},'${p.status==='published'?'draft':'published'}')" title="Toggle status">${p.status==='published'?'📤':'📢'}</button>
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="deleteBlog(${p.id})" title="Delete">🗑️</button>
+      </td>
+    </tr>`).join('')
+    : `<tr><td colspan="6" class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>No posts yet. Click "+ New Post" to write your first one.</td></tr>`;
+}
+
+function openBlogModal(id) {
+  $('blog-id').value = id || '';
+  $('blog-modal-title').textContent = id ? 'Edit Blog Post' : 'New Blog Post';
+  $('blog-title').value = '';
+  $('blog-category').value = '';
+  $('blog-status').value = 'draft';
+  $('blog-excerpt').value = '';
+  $('blog-featured-image').value = '';
+  $('blog-img-preview').style.display = 'none';
+  $('blog-meta-title').value = '';
+  $('blog-meta-desc').value = '';
+
+  if (!quill) {
+    quill = new Quill('#blog-editor', { theme:'snow', modules:{ toolbar:[[{header:[1,2,3,false]}],['bold','italic','underline'],['link','image'],['blockquote','code-block'],[{list:'ordered'},{list:'bullet'}],['clean']] } });
+  }
+  quill.setText('');
+
+  if (id) {
+    api('/api/admin/blog?id=' + id).then(p => {
+      $('blog-title').value    = p.title;
+      $('blog-category').value = p.category || '';
+      $('blog-status').value   = p.status;
+      $('blog-excerpt').value  = p.excerpt || '';
+      $('blog-meta-title').value = p.meta_title || '';
+      $('blog-meta-desc').value  = p.meta_description || '';
+      if (p.featured_image) {
+        $('blog-featured-image').value = p.featured_image;
+        $('blog-img-preview-img').src  = p.featured_image;
+        $('blog-img-preview').style.display = 'block';
+      }
+      quill.root.innerHTML = p.content || '';
+    });
+  }
+  openModal('blog-modal');
+}
+
+async function saveBlogPost() {
+  const id = $('blog-id').value;
+  const data = {
+    title: $('blog-title').value.trim(),
+    category: $('blog-category').value,
+    status: $('blog-status').value,
+    excerpt: $('blog-excerpt').value.trim(),
+    content: quill ? quill.root.innerHTML : '',
+    featured_image: $('blog-featured-image').value,
+    meta_title: $('blog-meta-title').value.trim(),
+    meta_description: $('blog-meta-desc').value.trim(),
+  };
+  if (!data.title) { toast('Title is required.','error'); return; }
+  try {
+    if (id) await api('/api/admin/blog?id=' + id, { method:'PUT', body:JSON.stringify(data) });
+    else     await api('/api/admin/blog',           { method:'POST', body:JSON.stringify(data) });
+    toast(id ? 'Post updated!' : 'Post created!');
+    closeModal('blog-modal');
+    loadBlog();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function toggleBlogStatus(id, newStatus) {
+  const post = blogPosts.find(p => p.id === id);
+  if (!post) return;
+  try {
+    await api('/api/admin/blog?id=' + id, { method:'PUT', body:JSON.stringify({...post, status:newStatus, content: ''}) });
+    toast(newStatus === 'published' ? 'Post published!' : 'Post set to draft.');
+    loadBlog();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function deleteBlog(id) {
+  confirmDelete('This blog post will be permanently deleted.', async () => {
+    try { await api('/api/admin/blog?id=' + id, {method:'DELETE'}); toast('Post deleted.'); loadBlog(); }
+    catch(e) { toast(e.message,'error'); }
+  });
+}
+
+// ─── Projects ─────────────────────────────────────────────────
+let projects = [];
+async function loadProjects() {
+  try {
+    const d = await api('/api/admin/projects');
+    projects = d.projects || [];
+    renderProjects();
+    updateTime();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function renderProjects() {
+  $('proj-grid').innerHTML = projects.length
+    ? projects.map(p => `
+      <div class="proj-card">
+        <div class="proj-thumb">
+          ${p.featured_image ? `<img src="${esc(p.featured_image)}" alt="${esc(p.title)}" onerror="this.style.display='none'" />` : ''}
+          <div class="proj-thumb-placeholder" style="${p.featured_image?'display:none':''}"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+        </div>
+        <div class="proj-info">
+          <h3>${esc(p.title)}</h3>
+          <div class="proj-meta">${esc(p.category||'')}${p.location?' · '+esc(p.location):''}</div>
+          <div style="margin-bottom:8px">${badge(p.status)}</div>
+          <div class="proj-actions">
+            <button class="btn btn-ghost btn-sm" onclick="openProjModal(${p.id})">✏️ Edit</button>
+            <button class="btn btn-ghost btn-sm" onclick="deleteProject(${p.id})">🗑️</button>
+          </div>
+        </div>
+      </div>`).join('')
+    : `<div class="empty" style="grid-column:span 3"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>No projects yet. Add your first one!</div>`;
+}
+
+function openProjModal(id) {
+  $('proj-id').value = id || '';
+  $('proj-modal-title').textContent = id ? 'Edit Project' : 'New Project';
+  $('proj-title').value = ''; $('proj-category').value = '';
+  $('proj-location').value = ''; $('proj-duration').value = '';
+  $('proj-desc').value = ''; $('proj-status').value = 'active';
+  $('proj-sort').value = '0'; $('proj-featured-image').value = '';
+  $('proj-img-preview').style.display = 'none';
+  $('proj-gallery').innerHTML = '';
+  projImages = [];
+
+  if (id) {
+    api('/api/admin/projects?id=' + id).then(p => {
+      $('proj-title').value    = p.title;
+      $('proj-category').value = p.category || '';
+      $('proj-location').value = p.location || '';
+      $('proj-duration').value = p.duration || '';
+      $('proj-desc').value     = p.description || '';
+      $('proj-status').value   = p.status;
+      $('proj-sort').value     = p.sort_order || 0;
+      if (p.featured_image) {
+        $('proj-featured-image').value = p.featured_image;
+        $('proj-img-preview-img').src  = p.featured_image;
+        $('proj-img-preview').style.display = 'block';
+      }
+      projImages = (p.images || []).map(i => ({path:i.image_path, caption:i.caption||''}));
+      renderProjGallery();
+    });
+  }
+  openModal('proj-modal');
+}
+
+function renderProjGallery() {
+  $('proj-gallery').innerHTML = projImages.map((img, i) => `
+    <div class="img-gallery-item">
+      <img src="${esc(img.path)}" alt="" />
+      <button class="img-gallery-remove" onclick="removeProjImg(${i})">✕</button>
+    </div>`).join('');
+}
+
+function removeProjImg(i) { projImages.splice(i, 1); renderProjGallery(); }
+
+async function saveProject() {
+  const id = $('proj-id').value;
+  const data = {
+    title: $('proj-title').value.trim(),
+    category: $('proj-category').value,
+    location: $('proj-location').value.trim(),
+    duration: $('proj-duration').value.trim(),
+    description: $('proj-desc').value.trim(),
+    featured_image: $('proj-featured-image').value,
+    status: $('proj-status').value,
+    sort_order: parseInt($('proj-sort').value) || 0,
+    images: projImages,
+  };
+  if (!data.title) { toast('Title is required.','error'); return; }
+  try {
+    if (id) await api('/api/admin/projects?id=' + id, {method:'PUT', body:JSON.stringify(data)});
+    else     await api('/api/admin/projects',          {method:'POST', body:JSON.stringify(data)});
+    toast(id ? 'Project updated!' : 'Project added!');
+    closeModal('proj-modal');
+    loadProjects();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function deleteProject(id) {
+  confirmDelete('This project and all its images will be permanently deleted.', async () => {
+    try { await api('/api/admin/projects?id=' + id, {method:'DELETE'}); toast('Project deleted.'); loadProjects(); }
+    catch(e) { toast(e.message,'error'); }
+  });
+}
+
+// ─── Testimonials ─────────────────────────────────────────────
+let testimonials = [];
+async function loadTestimonials() {
+  try {
+    const d = await api('/api/admin/testimonials');
+    testimonials = d.testimonials || [];
+    renderTestimonials();
+    updateTime();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function renderTestimonials() {
+  $('test-tbody').innerHTML = testimonials.length
+    ? testimonials.map(t => `
+      <tr>
+        <td class="td-bold">${esc(t.name)}</td>
+        <td class="td-muted">${esc(t.location||'—')}</td>
+        <td style="color:#f59e0b">${stars(t.rating)}</td>
+        <td class="td-muted" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.content)}</td>
+        <td>${badge(t.status)}</td>
+        <td class="td-actions">
+          <button class="btn btn-ghost btn-sm btn-icon" onclick="openTestModal(${t.id})">✏️</button>
+          <button class="btn btn-ghost btn-sm btn-icon" onclick="deleteTestimonial(${t.id})">🗑️</button>
+        </td>
+      </tr>`).join('')
+    : `<tr><td colspan="6" class="empty"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>No testimonials yet.</td></tr>`;
+}
+
+function openTestModal(id) {
+  $('test-id').value = id || '';
+  $('test-modal-title').textContent = id ? 'Edit Testimonial' : 'New Testimonial';
+  $('test-name').value = ''; $('test-location').value = '';
+  $('test-content').value = ''; $('test-status').value = 'active';
+  setRating(5);
+  if (id) {
+    const t = testimonials.find(x => x.id === id);
+    if (t) { $('test-name').value = t.name; $('test-location').value = t.location||''; $('test-content').value = t.content; $('test-status').value = t.status; setRating(t.rating||5); }
+  }
+  openModal('test-modal');
+}
+
+function setRating(n) {
+  $('test-rating').value = n;
+  document.querySelectorAll('#stars-input span').forEach((s,i) => s.classList.toggle('filled', i < n));
+}
+
+async function saveTestimonial() {
+  const id = $('test-id').value;
+  const data = { name:$('test-name').value.trim(), location:$('test-location').value.trim(), rating:parseInt($('test-rating').value)||5, content:$('test-content').value.trim(), status:$('test-status').value };
+  if (!data.name || !data.content) { toast('Name and review are required.','error'); return; }
+  try {
+    if (id) await api('/api/admin/testimonials?id=' + id, {method:'PUT', body:JSON.stringify(data)});
+    else     await api('/api/admin/testimonials',          {method:'POST', body:JSON.stringify(data)});
+    toast(id ? 'Testimonial updated!' : 'Testimonial added!');
+    closeModal('test-modal');
+    loadTestimonials();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function deleteTestimonial(id) {
+  confirmDelete('This testimonial will be permanently deleted.', async () => {
+    try { await api('/api/admin/testimonials?id=' + id, {method:'DELETE'}); toast('Testimonial deleted.'); loadTestimonials(); }
+    catch(e) { toast(e.message,'error'); }
+  });
+}
+
+// ─── Inquiries ────────────────────────────────────────────────
+async function loadInquiries() {
+  try {
+    const d = await api('/api/admin/inquiries?limit=200');
+    allInquiries = d.inquiries || [];
+    renderInquiries();
+    updateTime();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function filterInq(f, btn) {
+  inqFilter = f;
+  document.querySelectorAll('#view-inquiries .tab-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderInquiries();
+}
+
+function renderInquiries() {
+  const rows = inqFilter === 'all' ? allInquiries : allInquiries.filter(r => r.status === inqFilter);
+  $('inq-tbody').innerHTML = rows.length ? rows.map(r => `
+    <tr>
+      <td class="td-bold">${esc(r.name)}</td>
+      <td><a href="mailto:${esc(r.email)}" style="color:var(--orange)">${esc(r.email)}</a>${r.phone?`<br><span class="td-muted">${esc(r.phone)}</span>`:''}</td>
+      <td>${r.service?`<span class="badge badge-orange">${esc(r.service)}</span>`:'—'}</td>
+      <td class="td-muted" style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.message)}">${esc(r.message)}</td>
+      <td class="td-muted">${fmtDate(r.created_at)}</td>
+      <td>
+        <select class="status-sel" onchange="updateInqStatus(${r.id},this.value)">
+          ${['new','contacted','quoted','closed'].map(s=>`<option value="${s}"${r.status===s?' selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+        </select>
+      </td>
+    </tr>`).join('')
+    : `<tr><td colspan="6" class="empty">No inquiries found.</td></tr>`;
+}
+
+async function updateInqStatus(id, status) {
+  try { await api('/api/admin/inquiries?id=' + id, {method:'PATCH', body:JSON.stringify({status})}); const r = allInquiries.find(x=>x.id===id); if(r) r.status=status; }
+  catch(e) { toast(e.message,'error'); }
+}
+
+// ─── Quotes ───────────────────────────────────────────────────
+async function loadQuotes() {
+  try {
+    const d = await api('/api/admin/quotes?limit=200');
+    $('quote-tbody').innerHTML = (d.quotes||[]).length ? (d.quotes||[]).map(r => `
+      <tr>
+        <td class="td-bold">${esc(r.name)}</td>
+        <td><a href="mailto:${esc(r.email)}" style="color:var(--orange)">${esc(r.email)}</a><br><span class="td-muted">${esc(r.phone)}</span></td>
+        <td><span class="badge badge-orange">${esc(r.service)}</span></td>
+        <td class="td-muted">${esc(r.timeline||'—')}</td>
+        <td class="td-muted">${esc(r.budget||'—')}</td>
+        <td class="td-muted">${fmtDate(r.created_at)}</td>
+        <td>${badge(r.status)}</td>
+      </tr>`).join('')
+      : `<tr><td colspan="7" class="empty">No quote requests yet.</td></tr>`;
+    updateTime();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+// ─── Settings ─────────────────────────────────────────────────
+async function loadSettings() {
+  try {
+    const s = await api('/api/admin/settings');
+    $('set-phone').value         = s.phone || '';
+    $('set-email').value         = s.email || '';
+    $('set-address').value       = s.address || '';
+    $('set-hours-weekday').value = s.hours_weekday || '';
+    $('set-hours-weekend').value = s.hours_weekend || '';
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function saveSettings() {
+  const data = { phone:$('set-phone').value, email:$('set-email').value, address:$('set-address').value, hours_weekday:$('set-hours-weekday').value, hours_weekend:$('set-hours-weekend').value };
+  try { await api('/api/admin/settings', {method:'POST', body:JSON.stringify(data)}); toast('Settings saved!'); }
+  catch(e) { toast(e.message,'error'); }
+}
+
+// ─── Image upload ─────────────────────────────────────────────
+async function uploadImg(input, type, previewId, hiddenId) {
+  const file = input.files[0];
+  if (!file) return;
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('type', type);
+  try {
+    const res = await fetch('/api/admin/upload', {method:'POST', body:fd});
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error);
+    $(hiddenId).value = json.url;
+    $(previewId + '-img').src = json.url;
+    $(previewId).style.display = 'block';
+    toast('Image uploaded!');
+  } catch(e) { toast(e.message,'error'); }
+}
+
+async function uploadMultiImg(input, type) {
+  const files = Array.from(input.files);
+  for (const file of files) {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('type', type);
+    try {
+      const res = await fetch('/api/admin/upload', {method:'POST', body:fd});
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      projImages.push({path: json.url, caption: ''});
+      renderProjGallery();
+    } catch(e) { toast(e.message,'error'); }
+  }
+  if(files.length) toast(files.length + ' image(s) uploaded!');
+}
+
+function removeImg(previewId, hiddenId) {
+  $(previewId).style.display = 'none';
+  $(hiddenId).value = '';
+}
+
+// ─── Auth ─────────────────────────────────────────────────────
+async function signOut(e) {
+  e.preventDefault();
+  await fetch('/api/admin/auth', { method: 'DELETE' });
+  window.location.href = '/admin-login';
+}
+
+// ─── Init ─────────────────────────────────────────────────────
+loadDashboard();
+setInterval(updateTime, 60000);
+</script>
+</body>
+</html>

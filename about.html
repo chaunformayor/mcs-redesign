@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — Missouri Construction Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .timeline { position: relative; padding-left: 40px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+    .timeline-item { position: relative; margin-bottom: 36px; }
+    .timeline-dot { position: absolute; left: -40px; top: 4px; width: 18px; height: 18px; background: var(--orange); border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px var(--orange); }
+    .timeline-year { font-size: 12px; font-weight: 700; color: var(--orange); letter-spacing: 1px; margin-bottom: 4px; }
+    .timeline-item h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .timeline-item p { font-size: 14px; color: var(--slate); line-height: 1.6; }
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .team-card { background: white; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; text-align: center; }
+    .team-avatar { height: 200px; background-size: cover; background-position: center top; }
+    .team-avatar span { display: none; }
+    .team-info { padding: 20px; }
+    .team-info h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .team-info .role { font-size: 13px; color: var(--orange); font-weight: 600; margin-bottom: 10px; }
+    .team-info p { font-size: 13px; color: var(--slate); line-height: 1.6; }
+    .values-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .value-card { background: white; border-radius: 14px; border: 1px solid var(--border); padding: 28px; display: flex; gap: 18px; align-items: flex-start; }
+    .value-icon { width: 48px; height: 48px; background: rgba(249,115,22,.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .value-icon svg { width: 24px; height: 24px; fill: var(--orange); }
+    .value-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .value-card p { font-size: 14px; color: var(--slate); line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div>
+    <div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/about" class="active">About</a>
+    <a href="/services">Services</a>
+    <a href="/portfolio">Portfolio</a>
+    <a href="/blog">Blog</a>
+    <a href="/contact">Contact</a>
+    <a href="/contact" class="nav-cta">Request Quote</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a><span class="sep">›</span><span>About</span></div>
+    <div class="page-hero-label">Our Story</div>
+    <h1>Built on <em>Trust,</em><br>Driven by Quality</h1>
+    <p>For over 25 years, Missouri Construction Service has been the region's most trusted construction partner — built on hard work, honest dealing, and craftsmanship that lasts.</p>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>Founded in 1999</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>15-Person Team</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>500+ Projects Completed</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>4.9★ Average Rating</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>Fully Licensed & Insured</div>
+  </div>
+</div>
+
+<!-- STORY + TIMELINE -->
+<section style="background: white;">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;">
+      <div>
+        <div class="section-label">Our History</div>
+        <h2 class="section-title">25 Years of<br>Building Missouri</h2>
+        <p class="section-sub" style="margin-bottom:32px">What started as a two-man roofing crew in 1999 has grown into one of Missouri's most respected full-service construction companies — and we're still family-run at heart.</p>
+        <div class="timeline">
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-year">1999</div><h4>Founded</h4><p>Mike and Dave started with a pickup truck and a roofing contract in St. Louis.</p></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-year">2004</div><h4>Expanded to Remodeling</h4><p>Added full interior remodeling services after demand from existing roofing clients.</p></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-year">2010</div><h4>Licensed General Contractor</h4><p>Obtained Missouri general contractor license, opening doors to commercial projects.</p></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-year">2016</div><h4>Added Plumbing & Electrical</h4><p>Brought licensed plumbers and electricians in-house for full-service delivery.</p></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-year">2024</div><h4>500+ Projects Milestone</h4><p>Celebrated completing our 500th project with a perfect safety record.</p></div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Our Values</div>
+        <h2 class="section-title">What We<br>Stand For</h2>
+        <div style="margin-top:32px" class="values-grid">
+          <div class="value-card">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+            <div><h3>Quality First</h3><p>We never cut corners. Every project gets our full attention, from the first nail to the final walkthrough.</p></div>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+            <div><h3>Family Values</h3><p>We treat every client like a neighbor — with respect, honesty, and genuine care for their home.</p></div>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+            <div><h3>Accountability</h3><p>We say what we'll do and do what we say — on time, on budget, every time.</p></div>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+            <div><h3>Safety Always</h3><p>Perfect safety record maintained across 25 years and 500+ projects. Our team goes home safe every night.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section style="background:var(--light)">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-label">Meet the Team</div>
+      <h2 class="section-title">The People Behind the Work</h2>
+      <p class="section-sub">Our crew of licensed professionals brings decades of combined expertise to every project.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80')"><span>M</span></div>
+        <div class="team-info"><h3>Mike Johnson</h3><div class="role">Founder & General Contractor</div><p>25+ years in Missouri construction. Licensed GC with expertise in commercial and residential projects.</p></div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background-image:url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80')"><span>D</span></div>
+        <div class="team-info"><h3>Dave Martinez</h3><div class="role">Co-Founder & Project Manager</div><p>Master carpenter and project manager. Oversees quality control on every job site.</p></div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar" style="background-image:url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=400&q=80')"><span>S</span></div>
+        <div class="team-info"><h3>Sarah Thompson</h3><div class="role">Design Consultant</div><p>Interior design specialist who helps clients visualize and plan their remodeling projects.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div class="cta-strip-inner">
+    <div><h3>Ready to work with Missouri's best?</h3><p>Get a free estimate from our team — no pressure, no obligation.</p></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <a href="/contact" class="btn-primary">Request Free Quote</a>
+      <a href="tel:6362524203" class="btn-outline">📞 (636) 252-4203</a>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-label">Reviews</div>
+      <h2 class="section-title">What Our Clients Say</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+        <p>"MCS completely transformed our kitchen. The team was professional, clean, and finished 3 days early. I couldn't be happier with the result."</p>
+        <div class="testimonial-author"><div class="author-avatar">J</div><div><div class="author-name">Jennifer R.</div><div class="author-location">St. Louis, MO</div></div></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+        <p>"New roof installed in 2 days. Great price, zero mess left behind, and they caught some rotted decking that saved us from a much bigger problem later."</p>
+        <div class="testimonial-author"><div class="author-avatar">T</div><div><div class="author-name">Tom & Lisa K.</div><div class="author-location">Chesterfield, MO</div></div></div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+        <p>"We hired MCS for a complete property rehab on a rental we bought. They handled everything — roof, plumbing, electrical, drywall. Turned out amazing."</p>
+        <div class="testimonial-author"><div class="author-avatar">R</div><div><div class="author-name">Robert A.</div><div class="author-location">Ballwin, MO</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div><div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div></a>
+      <p>Your trusted partner in construction and renovation across Missouri. Quality craftsmanship since 1999.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="#" class="social-btn"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/></svg></a>
+      </div>
+    </div>
+    <div><h4>Services</h4><ul><li><a href="/services">General Contracting</a></li><li><a href="/services">Remodeling</a></li><li><a href="/services">Roofing</a></li><li><a href="/services">Plumbing</a></li><li><a href="/services">Electrical</a></li><li><a href="/services">Property Rehabs</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="/about">About Us</a></li><li><a href="/portfolio">Portfolio</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div><h4>Contact Us</h4>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>(636) 252-4203</div>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>info@missouriconstructionservice.com</div>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>St. Louis, MO</div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Missouri Construction Service. All rights reserved.</p>
+    <div class="footer-bottom-links"><a href="/privacy">Privacy Policy</a><a href="/contact">Contact</a></div>
+  </div>
+</footer>
+</body>
+</html>

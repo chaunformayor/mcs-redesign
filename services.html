@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services — Missouri Construction Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .service-detail { background: white; border-radius: 18px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 32px; }
+    .service-detail-header { display: flex; align-items: center; gap: 20px; padding: 32px 36px; border-bottom: 1px solid var(--border); }
+    .service-detail-icon { width: 60px; height: 60px; background: rgba(249,115,22,.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .service-detail-icon svg { width: 30px; height: 30px; fill: var(--orange); }
+    .service-detail-header h2 { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+    .service-detail-header p { font-size: 14px; color: var(--slate); }
+    .service-detail-body { display: grid; grid-template-columns: 1fr 1fr; }
+    .service-detail-info { padding: 32px 36px; }
+    .service-detail-info p { font-size: 15px; color: var(--slate); line-height: 1.7; margin-bottom: 24px; }
+    .service-includes h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--charcoal); margin-bottom: 12px; }
+    .service-includes ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .service-includes ul li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--charcoal); }
+    .service-includes ul li::before { content: ''; width: 18px; height: 18px; background: rgba(249,115,22,.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23f97316' d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E"); background-size: 14px; background-repeat: no-repeat; background-position: center; }
+    .service-detail-cta { padding: 32px 36px; background: var(--light); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 16px; }
+    .service-detail-cta .price-note { font-size: 13px; color: var(--slate); }
+    .service-detail-cta strong { color: var(--charcoal); }
+    .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+    .process-step { text-align: center; padding: 36px 24px; position: relative; }
+    .process-step:not(:last-child)::after { content: '→'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); font-size: 20px; color: var(--orange); }
+    .process-num { width: 52px; height: 52px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-family: 'Oswald', sans-serif; font-size: 1.2rem; font-weight: 700; color: white; }
+    .process-step h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+    .process-step p { font-size: 13px; color: var(--slate); line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div>
+    <div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a><a href="/about">About</a><a href="/services" class="active">Services</a><a href="/portfolio">Portfolio</a><a href="/blog">Blog</a><a href="/contact">Contact</a>
+    <a href="/contact" class="nav-cta">Request Quote</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a><span class="sep">›</span><span>Services</span></div>
+    <div class="page-hero-label">What We Do</div>
+    <h1>Full-Service <em>Construction</em><br>& Renovation</h1>
+    <p>From a leaky roof to a complete property rehab, Missouri Construction Service handles it all under one roof — licensed, insured, and guaranteed.</p>
+  </div>
+</div>
+
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Free Estimates</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>Licensed & Insured</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>On-Time Delivery</div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>(636) 252-4203</div>
+  </div>
+</div>
+
+<!-- SERVICES DETAIL -->
+<section style="background: var(--light);">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-label">Our Services</div>
+      <h2 class="section-title">Everything Your Property Needs</h2>
+      <p class="section-sub">Six core service areas, all delivered by our in-house licensed team — no subcontractor surprises.</p>
+    </div>
+
+    <div class="service-detail">
+      <div class="service-detail-header">
+        <div class="service-detail-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+        <div><h2>General Contracting</h2><p>Complete project management from planning to final walkthrough</p></div>
+      </div>
+      <div class="service-detail-body">
+        <div class="service-detail-info">
+          <p>As your general contractor, we manage every aspect of your construction project — coordinating trades, managing timelines, pulling permits, and ensuring quality at every stage. You get one point of contact and zero headaches.</p>
+          <div class="service-includes"><h4>What's Included</h4><ul><li>Project planning and design consultation</li><li>Permit acquisition and code compliance</li><li>Subcontractor coordination and oversight</li><li>Budget management and cost reporting</li><li>Final inspection and project closeout</li></ul></div>
+        </div>
+        <div class="service-detail-cta">
+          <div class="badge badge-orange">Most Popular</div>
+          <h3 style="font-size:1.1rem;font-weight:700">Free Project Consultation</h3>
+          <p class="price-note">We'll review your plans, provide a detailed estimate, and outline a realistic timeline — at no cost.</p>
+          <a href="/contact" class="btn-primary">Request Consultation →</a>
+          <p class="price-note"><strong>Call us:</strong> (636) 252-4203</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-detail">
+      <div class="service-detail-header">
+        <div class="service-detail-icon"><svg viewBox="0 0 24 24"><path d="M21 6.5l-4-4-8.5 8.5-2 4 4-2L21 6.5z"/></svg></div>
+        <div><h2>Remodeling</h2><p>Kitchen, bathroom, basement, and full home renovations</p></div>
+      </div>
+      <div class="service-detail-body">
+        <div class="service-detail-info">
+          <p>Transform your living space with a remodel designed around how you actually live. We work with you on design, material selection, and custom finishes to create a space that looks great and adds real value to your home.</p>
+          <div class="service-includes"><h4>What's Included</h4><ul><li>Kitchen remodels (cabinets, counters, appliances)</li><li>Bathroom renovations (tile, fixtures, vanities)</li><li>Basement finishing and conversion</li><li>Room additions and open-concept conversions</li><li>Custom millwork and finish carpentry</li></ul></div>
+        </div>
+        <div class="service-detail-cta">
+          <div class="badge badge-green">High ROI</div>
+          <h3 style="font-size:1.1rem;font-weight:700">Start with a Design Consult</h3>
+          <p class="price-note">Our design consultant will help you visualize the finished space before a single nail is driven.</p>
+          <a href="/contact" class="btn-primary">Book Design Consult →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-detail">
+      <div class="service-detail-header">
+        <div class="service-detail-icon"><svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v9h6v-5h2v5h6v-9h3L12 3z"/></svg></div>
+        <div><h2>Roofing</h2><p>Installation, repair, and full replacement — residential & commercial</p></div>
+      </div>
+      <div class="service-detail-body">
+        <div class="service-detail-info">
+          <p>Missouri weather is tough on roofs. From spring hail to winter ice dams, we handle it all — with quality materials, factory-trained installers, and workmanship warranties on every job.</p>
+          <div class="service-includes"><h4>What's Included</h4><ul><li>Full roof replacement (shingles, metal, flat)</li><li>Storm damage repair and insurance claims</li><li>Leak detection and targeted repairs</li><li>Gutters, soffits, and fascia</li><li>Roof inspections and maintenance plans</li></ul></div>
+        </div>
+        <div class="service-detail-cta">
+          <div class="badge badge-orange">Free Inspection</div>
+          <h3 style="font-size:1.1rem;font-weight:700">Get a Roof Inspection</h3>
+          <p class="price-note">We'll inspect your roof for free and give you an honest assessment — even if you don't need us.</p>
+          <a href="/contact" class="btn-primary">Schedule Inspection →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-detail">
+      <div class="service-detail-header">
+        <div class="service-detail-icon"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
+        <div><h2>Plumbing</h2><p>Licensed plumbing for installs, repairs, and emergencies</p></div>
+      </div>
+      <div class="service-detail-body">
+        <div class="service-detail-info">
+          <p>Our licensed plumbers handle everything from a dripping faucet to a full re-pipe. We're available for scheduled work and emergency calls — because water damage doesn't keep business hours.</p>
+          <div class="service-includes"><h4>What's Included</h4><ul><li>Water heater installation and replacement</li><li>Pipe repair, replacement, and re-piping</li><li>Fixture installation (sinks, toilets, showers)</li><li>Drain cleaning and sewer line service</li><li>Emergency plumbing response</li></ul></div>
+        </div>
+        <div class="service-detail-cta">
+          <h3 style="font-size:1.1rem;font-weight:700">Need Emergency Help?</h3>
+          <p class="price-note">Call us now — we respond to plumbing emergencies fast.</p>
+          <a href="tel:6362524203" class="btn-primary">📞 Call Now</a>
+          <a href="/contact" class="btn-dark" style="padding:12px 20px;font-size:14px">Schedule Service →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-detail">
+      <div class="service-detail-header">
+        <div class="service-detail-icon"><svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></div>
+        <div><h2>Electrical</h2><p>Certified electrical work — wiring, panels, inspections</p></div>
+      </div>
+      <div class="service-detail-body">
+        <div class="service-detail-info">
+          <p>Electrical work is not a DIY project. Our certified electricians keep your home or business safe, up to code, and ready for today's power demands — from a simple outlet to a full panel upgrade.</p>
+          <div class="service-includes"><h4>What's Included</h4><ul><li>Panel upgrades and service upgrades</li><li>New circuit installation</li><li>Outlet, switch, and fixture replacement</li><li>EV charger installation</li><li>Safety inspections and code compliance</li></ul></div>
+        </div>
+        <div class="service-detail-cta">
+          <div class="badge badge-orange">Safety First</div>
+          <h3 style="font-size:1.1rem;font-weight:700">Get an Electrical Estimate</h3>
+          <p class="price-note">We'll assess your needs and provide a transparent, itemized quote.</p>
+          <a href="/contact" class="btn-primary">Request Estimate →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-detail">
+      <div class="service-detail-header">
+        <div class="service-detail-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+        <div><h2>Property Rehabs</h2><p>Full restoration of residential and commercial properties</p></div>
+      </div>
+      <div class="service-detail-body">
+        <div class="service-detail-info">
+          <p>Investors, landlords, and property owners trust us to take distressed properties and bring them back to life. We manage the entire scope — from demo to final finishes — so you can focus on the deal, not the build.</p>
+          <div class="service-includes"><h4>What's Included</h4><ul><li>Full property assessment and scope of work</li><li>Demo and haul-away</li><li>Structural repairs and framing</li><li>All trades coordinated in-house</li><li>Interior finishes, paint, and punch-out</li></ul></div>
+        </div>
+        <div class="service-detail-cta">
+          <div class="badge badge-green">Investor Friendly</div>
+          <h3 style="font-size:1.1rem;font-weight:700">Rehab Consultation</h3>
+          <p class="price-note">We work with investors regularly. Fast turnarounds, reliable pricing, proven process.</p>
+          <a href="/contact" class="btn-primary">Talk to Our Team →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="background:white;">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-label">Our Process</div>
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-sub">Simple, transparent, and stress-free from start to finish.</p>
+    </div>
+    <div class="process-grid">
+      <div class="process-step"><div class="process-num">1</div><h3>Request a Quote</h3><p>Call us or submit the online form. We respond within 1 business day.</p></div>
+      <div class="process-step"><div class="process-num">2</div><h3>On-Site Estimate</h3><p>We visit your property, assess the scope, and provide a detailed written estimate — free.</p></div>
+      <div class="process-step"><div class="process-num">3</div><h3>We Get to Work</h3><p>Once you approve, we schedule your project and get started on time.</p></div>
+      <div class="process-step"><div class="process-num">4</div><h3>Final Walkthrough</h3><p>We walk through every detail together before calling it done. Your satisfaction is guaranteed.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Ready to Get Started?</h2>
+  <p>Request your free estimate today and let our team bring your project to life.</p>
+  <div class="cta-btns">
+    <a href="/contact" class="btn-white">Request Free Quote</a>
+    <a href="tel:6362524203" class="btn-outline-white">📞 (636) 252-4203</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div><div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div></a>
+      <p>Your trusted partner in construction and renovation across Missouri. Quality craftsmanship since 1999.</p>
+      <div class="footer-social"><a href="#" class="social-btn"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div>
+    </div>
+    <div><h4>Services</h4><ul><li><a href="/services">General Contracting</a></li><li><a href="/services">Remodeling</a></li><li><a href="/services">Roofing</a></li><li><a href="/services">Plumbing</a></li><li><a href="/services">Electrical</a></li><li><a href="/services">Property Rehabs</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="/about">About Us</a></li><li><a href="/portfolio">Portfolio</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div><h4>Contact Us</h4>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>(636) 252-4203</div>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>info@missouriconstructionservice.com</div>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>St. Louis, MO</div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 Missouri Construction Service. All rights reserved.</p><div class="footer-bottom-links"><a href="/privacy">Privacy Policy</a><a href="/contact">Contact</a></div></div>
+</footer>
+</body>
+</html>
