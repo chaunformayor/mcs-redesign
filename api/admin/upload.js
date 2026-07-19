@@ -32,10 +32,14 @@ export default async function handler(req, res) {
     const name   = `${folder}/${Date.now()}.${ext}`
 
     try {
+      const token = process.env.BLOB_READ_WRITE_TOKEN
+      if (!token) return res.status(500).json({ error: 'BLOB_READ_WRITE_TOKEN is not set in environment variables' })
+
       const stream = createReadStream(file.filepath)
       const blob   = await put(name, stream, {
         access:      'public',
         contentType: file.mimetype,
+        token,
       })
       return res.json({
         success: true,
