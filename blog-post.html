@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Missouri Construction Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/shared.css" />
+  <style>
+    .post-layout { display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: start; }
+    .post-hero-img { width: 100%; height: 420px; object-fit: cover; border-radius: 16px; display: block; margin-bottom: 32px; background: var(--charcoal); }
+    .post-hero-img-placeholder { width: 100%; height: 420px; border-radius: 16px; background: var(--charcoal); display: flex; align-items: center; justify-content: center; margin-bottom: 32px; }
+    .post-hero-img-placeholder svg { width: 64px; height: 64px; fill: rgba(249,115,22,.3); }
+    .post-meta { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--slate); margin-bottom: 20px; flex-wrap: wrap; }
+    .post-meta .dot { width: 3px; height: 3px; background: var(--slate); border-radius: 50%; }
+    .post-cat { color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+    .post-title { font-family: 'Oswald', sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1.2; margin-bottom: 16px; }
+    .post-content { font-size: 15px; line-height: 1.8; color: #374151; }
+    .post-content h1, .post-content h2, .post-content h3 { font-family: 'Oswald', sans-serif; font-weight: 700; margin: 28px 0 12px; color: var(--charcoal); }
+    .post-content h2 { font-size: 1.5rem; }
+    .post-content h3 { font-size: 1.2rem; }
+    .post-content p { margin-bottom: 16px; }
+    .post-content ul, .post-content ol { padding-left: 24px; margin-bottom: 16px; }
+    .post-content li { margin-bottom: 6px; }
+    .post-content blockquote { border-left: 4px solid var(--orange); padding: 12px 20px; margin: 20px 0; background: rgba(249,115,22,.05); border-radius: 0 8px 8px 0; font-style: italic; color: var(--slate); }
+    .post-content img { max-width: 100%; border-radius: 10px; margin: 16px 0; }
+    .post-divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+    .sidebar { display: flex; flex-direction: column; gap: 24px; }
+    .sidebar-card { background: white; border-radius: 14px; border: 1px solid var(--border); padding: 24px; }
+    .sidebar-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+    .sidebar-cta { background: var(--charcoal); color: white; border-radius: 14px; padding: 28px 24px; text-align: center; }
+    .sidebar-cta h3 { color: white; border-bottom-color: rgba(255,255,255,.1); }
+    .sidebar-cta p { font-size: 13px; color: #9ca3af; margin-bottom: 16px; line-height: 1.6; }
+    .sidebar-cta .btn-primary { width: 100%; justify-content: center; }
+    .recent-post { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; }
+    .recent-post:last-child { border-bottom: 0; padding-bottom: 0; }
+    .recent-post:hover h4 { color: var(--orange); }
+    .recent-post-thumb { width: 56px; height: 56px; border-radius: 8px; flex-shrink: 0; background: var(--light); display: flex; align-items: center; justify-content: center; background-size: cover; background-position: center; }
+    .recent-post h4 { font-size: 13px; font-weight: 600; line-height: 1.35; margin-bottom: 4px; transition: color .15s; }
+    .recent-post span { font-size: 11px; color: var(--slate); }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--slate); font-size: 13px; font-weight: 600; text-decoration: none; margin-bottom: 24px; transition: color .15s; }
+    .back-link:hover { color: var(--orange); }
+    .not-found { text-align: center; padding: 80px 20px; }
+    .not-found h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
+    .not-found p { color: var(--slate); margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div>
+    <div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/portfolio">Portfolio</a><a href="/blog" class="active">Blog</a><a href="/contact">Contact</a>
+    <a href="/contact" class="nav-cta">Request Quote</a>
+  </div>
+</nav>
+
+<section style="background:var(--light);padding-top:40px">
+  <div class="container">
+    <a href="/blog" class="back-link">← Back to Blog</a>
+    <div class="post-layout">
+      <div id="post-main">
+        <div style="padding:48px;text-align:center;color:var(--slate)">Loading…</div>
+      </div>
+      <div class="sidebar">
+        <div class="sidebar-cta">
+          <h3>Ready to Start a Project?</h3>
+          <p>Get a free consultation and estimate from Missouri's most trusted construction team.</p>
+          <a href="/contact" class="btn-primary">Request Free Quote</a>
+          <p style="margin-top:12px;font-size:12px;color:#9ca3af">Or call: (636) 252-4203</p>
+        </div>
+        <div class="sidebar-card">
+          <h3>Recent Posts</h3>
+          <div id="recent-posts"><div style="color:var(--slate);font-size:13px">Loading…</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Have a Project in Mind?</h2>
+  <p>Our team is ready to help. Get a free estimate — no commitment required.</p>
+  <div class="cta-btns">
+    <a href="/contact" class="btn-white">Request Free Quote</a>
+    <a href="tel:6362524203" class="btn-outline-white">📞 (636) 252-4203</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div><div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div></a>
+      <p>Quality craftsmanship across Missouri since 1999.</p>
+    </div>
+    <div><h4>Services</h4><ul><li><a href="/services">General Contracting</a></li><li><a href="/services">Remodeling</a></li><li><a href="/services">Roofing</a></li><li><a href="/services">Plumbing</a></li><li><a href="/services">Electrical</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="/about">About Us</a></li><li><a href="/portfolio">Portfolio</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div><h4>Contact Us</h4>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>(636) 252-4203</div>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>info@missouriconstructionservice.com</div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 Missouri Construction Service. All rights reserved.</p><div class="footer-bottom-links"><a href="/privacy">Privacy Policy</a><a href="/contact">Contact</a></div></div>
+</footer>
+
+<script>
+const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmtDate = d => new Date(d).toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+
+const slug = window.location.pathname.replace('/blog/', '').replace(/\/$/, '');
+
+async function loadPost() {
+  try {
+    const [postRes, listRes] = await Promise.all([
+      fetch(`/api/public?type=post&slug=${encodeURIComponent(slug)}`),
+      fetch('/api/public?type=blog'),
+    ]);
+
+    if (!postRes.ok) {
+      document.getElementById('post-main').innerHTML = `
+        <div class="not-found">
+          <h2>Post Not Found</h2>
+          <p>This article may have been moved or is no longer published.</p>
+          <a href="/blog" class="btn-primary">← Back to Blog</a>
+        </div>`;
+      return;
+    }
+
+    const { post } = await postRes.json();
+    document.title = `${post.title} — Missouri Construction Service`;
+
+    document.getElementById('post-main').innerHTML = `
+      ${post.featured_image
+        ? `<img class="post-hero-img" src="${esc(post.featured_image)}" alt="${esc(post.title)}" />`
+        : `<div class="post-hero-img-placeholder"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>`}
+      <div class="post-cat">${esc(post.category || 'General')}</div>
+      <h1 class="post-title">${esc(post.title)}</h1>
+      <div class="post-meta">
+        <span>${fmtDate(post.created_at)}</span>
+        <span class="dot"></span>
+        <span>By ${esc(post.author)}</span>
+      </div>
+      <hr class="post-divider" />
+      <div class="post-content">${post.content || ''}</div>
+      <hr class="post-divider" />
+      <a href="/contact" class="btn-primary">Start a Similar Project →</a>`;
+
+    const { posts } = await listRes.json();
+    const recent = (posts || []).filter(p => p.slug !== slug).slice(0, 4);
+    document.getElementById('recent-posts').innerHTML = recent.length
+      ? recent.map(p => `
+          <a href="/blog/${esc(p.slug)}" class="recent-post">
+            <div class="recent-post-thumb" style="${p.featured_image ? `background-image:url('${esc(p.featured_image)}')` : ''}">
+              ${!p.featured_image ? '<svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:rgba(249,115,22,.5)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>' : ''}
+            </div>
+            <div><h4>${esc(p.title)}</h4><span>${fmtDate(p.created_at)}</span></div>
+          </a>`).join('')
+      : '<p style="font-size:13px;color:var(--slate)">No other posts yet.</p>';
+
+  } catch(e) {
+    document.getElementById('post-main').innerHTML = '<div style="padding:48px;text-align:center;color:var(--slate)">Could not load post.</div>';
+  }
+}
+
+loadPost();
+</script>
+</body>
+</html>
