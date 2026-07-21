@@ -36,6 +36,7 @@ Chaun — St. Louis-based real estate investor and contractor, 25+ years experie
 | `contact.html` | `/contact` | Contact + quote request forms (wired to API) |
 | `admin.html` | `/admin` | Admin SPA (JWT protected) |
 | `admin-login.html` | `/admin-login` | Login page |
+| `estimator.html` | `/estimator` | MCS Rehab Estimator (JWT protected, embedded in admin via iframe under Tools > Rehab Estimator). Tabbed internal cost estimator (Framing/Finishes/Flooring/Kitchen/Bathrooms/Exterior/Fees/Summary) with fully editable line items (name, qty, mat $/unit, labor hrs), add/delete rows, 10% material waste factor, $75/hr 2-person crew labor rate, and a "Generate Client-Facing Estimate" button that produces a Conservative/Full-Scope lump-sum client view (no line-item pricing) with print-to-PDF support. Auth guard pings `/api/admin/dashboard` on load and redirects to `/admin-login` on a 401 (same pattern as admin.html's `api()` helper) since it's a standalone static page outside the SPA shell.
 
 ## API Endpoints (12 total — Hobby plan limit)
 | File | Route | Purpose |

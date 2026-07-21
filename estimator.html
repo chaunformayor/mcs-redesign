@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MCS Rehab Estimator — 426 Maffitt Ave Make-Ready</title>
+<style>
+  :root{
+    --navy:#1B3A5C;
+    --navy-light:#2c5580;
+    --bg:#f4f6f8;
+    --line:#d7dee5;
+    --good:#1f7a4d;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:Arial, Helvetica, sans-serif; margin:0; background:var(--bg); color:#222;}
+  header{background:var(--navy); color:#fff; padding:22px 28px;}
+  header h1{margin:0; font-size:22px; letter-spacing:.3px;}
+  header p{margin:4px 0 0; font-size:13px; color:#cfdcea;}
+  .meta{display:flex; gap:28px; padding:14px 28px; background:#fff; border-bottom:1px solid var(--line); flex-wrap:wrap; font-size:13px;}
+  .meta label{display:block; color:#607080; font-size:11px; text-transform:uppercase; letter-spacing:.4px; margin-bottom:2px;}
+  .meta input{border:1px solid var(--line); border-radius:4px; padding:5px 7px; font-family:Arial; font-size:13px;}
+  nav{display:flex; flex-wrap:wrap; background:#fff; border-bottom:2px solid var(--navy); padding:0 20px;}
+  nav button{background:none; border:none; padding:12px 16px; font-family:Arial; font-size:13px; cursor:pointer; color:#44586e; border-bottom:3px solid transparent;}
+  nav button.active{color:var(--navy); border-bottom:3px solid var(--navy); font-weight:bold;}
+  main{padding:22px 28px 60px;}
+  .tab{display:none;}
+  .tab.active{display:block;}
+  h2{color:var(--navy); font-size:17px; border-bottom:1px solid var(--line); padding-bottom:6px;}
+  .room{margin-bottom:22px; background:#fff; border:1px solid var(--line); border-radius:6px; overflow:hidden;}
+  .room h3{margin:0; background:#eef2f6; padding:8px 12px; font-size:13px; color:var(--navy); text-transform:uppercase; letter-spacing:.3px;}
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  th{text-align:left; background:#f8fafb; padding:7px 10px; font-size:11px; color:#607080; text-transform:uppercase; letter-spacing:.3px; border-bottom:1px solid var(--line);}
+  td{padding:6px 10px; border-bottom:1px solid #eef1f4; vertical-align:middle;}
+  td.num{text-align:right; white-space:nowrap;}
+  input.qty{width:55px; padding:3px 5px; border:1px solid var(--line); border-radius:3px; text-align:right;}
+  input.hrs{width:55px; padding:3px 5px; border:1px solid var(--line); border-radius:3px; text-align:right;}
+  input.matunit{width:70px; padding:3px 5px; border:1px solid var(--line); border-radius:3px; text-align:right;}
+  input.itemname{width:100%; min-width:180px; padding:3px 5px; border:1px solid transparent; border-radius:3px; background:transparent; font-family:Arial; font-size:12.5px;}
+  input.itemname:hover, input.itemname:focus{border-color:var(--line); background:#fff;}
+  td.delcol{text-align:center; width:28px;}
+  .delBtn{background:none; border:none; color:#b23b3b; font-size:15px; cursor:pointer; line-height:1; padding:2px 6px; border-radius:3px;}
+  .delBtn:hover{background:#fbe3e3;}
+  .addBtn{background:none; border:1px dashed var(--line); color:var(--navy); font-size:11.5px; cursor:pointer; padding:6px 10px; margin:8px 12px 10px; border-radius:4px; font-family:Arial;}
+  .addBtn:hover{background:#eef2f6;}
+  .subtotal-row td{background:#f8fafb; font-weight:bold;}
+  .tabfoot{display:flex; justify-content:flex-end; gap:26px; padding:10px 12px; background:#f8fafb; font-size:13px;}
+  .tabfoot div span{display:block; font-size:10px; color:#607080; text-transform:uppercase;}
+  .fees label{display:flex; align-items:center; gap:8px; padding:8px 0; font-size:13px;}
+  .fees input[type=number]{width:90px; padding:4px 6px; border:1px solid var(--line); border-radius:3px;}
+  .fees .row{display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eef1f4; padding:6px 0;}
+  #summary table{background:#fff;}
+  #summary td, #summary th{padding:9px 12px;}
+  #summary .grand td{font-size:15px; font-weight:bold; background:var(--navy); color:#fff;}
+  footer{text-align:center; font-size:11px; color:#8496a6; padding:18px; border-top:1px solid var(--line); background:#fff;}
+  .note{font-size:11px; color:#8496a6; margin-top:6px;}
+
+  /* ---- Client-facing view ---- */
+  #clientView{display:none;}
+  #clientView.active{display:block; background:#fff;}
+  #clientView .bidHeader{background:var(--navy); color:#fff; padding:26px 36px;}
+  #clientView .bidHeader h1{margin:0; font-size:24px;}
+  #clientView .bidHeader p{margin:4px 0 0; font-size:13px; color:#cfdcea;}
+  #clientBody{padding:30px 40px; max-width:820px; margin:0 auto;}
+  .bidBlock{display:flex; justify-content:space-between; margin-bottom:22px; font-size:13px;}
+  .bidBlock div{line-height:1.6;}
+  .bidBlock b{color:var(--navy);}
+  .checklist h4{color:var(--navy); font-size:13px; text-transform:uppercase; letter-spacing:.4px; border-bottom:1px solid var(--line); padding-bottom:5px; margin:20px 0 8px;}
+  .checklist ul{list-style:none; margin:0; padding:0; columns:2; column-gap:30px;}
+  .checklist li{font-size:13px; padding:3px 0; break-inside:avoid;}
+  .checklist li:before{content:"✓ "; color:var(--good); font-weight:bold;}
+  .pricingBox{margin-top:26px; border:2px solid var(--navy); border-radius:6px; overflow:hidden;}
+  .pricingBox .opt{display:flex; justify-content:space-between; padding:14px 20px; font-size:14px; border-bottom:1px solid var(--line);}
+  .pricingBox .opt:last-child{border-bottom:none;}
+  .pricingBox .opt b{color:var(--navy); font-size:18px;}
+  .pricingBox .opt .lbl{font-weight:bold;}
+  .pricingBox .opt .desc{font-size:11px; color:#607080; display:block; font-weight:normal;}
+  .terms{margin-top:26px; font-size:11.5px; color:#3a4a5a; line-height:1.6;}
+  .terms h4{color:var(--navy); font-size:13px; text-transform:uppercase; letter-spacing:.4px; border-bottom:1px solid var(--line); padding-bottom:5px; margin-bottom:8px;}
+  .siglines{display:flex; justify-content:space-between; margin-top:40px; gap:40px;}
+  .sigline{flex:1;}
+  .sigline .line{border-bottom:1px solid #333; margin-bottom:4px; height:34px;}
+  .sigline span{font-size:11px; color:#607080;}
+  .clientToolbar{position:sticky; top:0; background:#fff; border-bottom:1px solid var(--line); padding:10px 20px; display:flex; gap:10px; z-index:5;}
+  .clientToolbar button{background:var(--navy); color:#fff; border:none; padding:8px 16px; border-radius:4px; font-family:Arial; font-size:12.5px; cursor:pointer;}
+  .clientToolbar button.secondary{background:#fff; color:var(--navy); border:1px solid var(--navy);}
+  .mult-box{display:flex; gap:20px; align-items:center; margin:10px 0 18px; font-size:12.5px;}
+  .mult-box label{display:flex; flex-direction:column; gap:3px; color:#607080; font-size:11px; text-transform:uppercase;}
+  .mult-box input{padding:4px 6px; border:1px solid var(--line); border-radius:3px; width:70px; font-size:13px; color:#222;}
+  .genBtn{background:var(--navy); color:#fff; border:none; padding:10px 18px; border-radius:5px; font-family:Arial; font-size:13px; cursor:pointer; margin-top:10px;}
+  .adminBar{background:#0D1B2A; color:#C9A84C; padding:8px 28px; font-size:12px; display:flex; align-items:center; gap:8px; font-family:Arial;}
+  .adminBar a{color:#C9A84C; text-decoration:none; font-weight:bold;}
+  .adminBar a:hover{text-decoration:underline;}
+  @media print{ .adminBar{display:none !important;} }
+
+  @media print{
+    header, nav, .meta, .clientToolbar, footer{display:none !important;}
+    #tabcontent > .tab{display:none !important;}
+    #clientView{display:block !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="adminBar">← <a href="/admin">Back to Admin</a> &nbsp;|&nbsp; MCS Rehab Estimator</div>
+
+<header>
+  <h1>Missouri Construction Service — Rehab Estimator (Internal)</h1>
+  <p>Two-person crew | $75/hr labor rate | 10% material waste factor applied</p>
+</header>
+
+<div class="meta">
+  <div><label>Estimate #</label><input id="estNo" value="MCS-2026-0720-01"></div>
+  <div><label>Property</label><input id="prop" value="426 Maffitt Ave, St. Louis, MO" style="width:230px;"></div>
+  <div><label>Project</label><input id="proj" value="Make-Ready Turnover" style="width:170px;"></div>
+  <div><label>Date</label><input id="dt" value="07/20/2026"></div>
+  <div><label>Client Name</label><input id="clientName" value="" placeholder="Client / Owner name" style="width:180px;"></div>
+</div>
+
+<nav id="tabnav"></nav>
+<main id="tabcontent"></main>
+
+<footer>Missouri Construction Service | St. Louis, MO | info@midwestinvestorservices.com</footer>
+
+<div id="clientView">
+  <div class="clientToolbar">
+    <button class="secondary" onclick="closeClientView()">← Back to Estimator</button>
+    <button onclick="window.print()">Print / Save as PDF</button>
+  </div>
+  <div class="bidHeader">
+    <h1>Missouri Construction Service</h1>
+    <p>Licensed General Contracting &amp; Rehab | St. Louis, MO</p>
+  </div>
+  <div id="clientBody"></div>
+</div>
+
+<script>
+// ---- Admin auth guard (reuses the existing mcs_admin JWT cookie) ----
+(async function requireAdminSession(){
+  try{
+    const res = await fetch('/api/admin/dashboard', { credentials: 'same-origin' });
+    if(res.status === 401){ window.location.href = '/admin-login'; }
+  }catch(e){ /* if the check itself fails, leave the page up rather than lock the user out */ }
+})();
+
+const LABOR_RATE = 75;   // $/hr, 2-person crew
+const WASTE = 0.10;
+
+// ---- Line item data, grouped by scope tab, sub-grouped by room ----
+// mat = material cost per unit; qty = default quantity; hrs = default labor hours (crew hours, not per-person)
+const DATA = {
+  Framing: {
+    note: "No structural framing scope identified in this make-ready. Add items here if field conditions reveal otherwise.",
+    rooms: {}
+  },
+  Finishes: {
+    rooms: {
+      "Whole House / Stairway": [
+        {n:"Paint trim and doors throughout", mat:180, qty:1, hrs:16},
+        {n:"Paint stairway leading to basement", mat:40, qty:1, hrs:4},
+      ],
+      "Entryway": [
+        {n:"Repair entry door", mat:35, qty:1, hrs:2},
+        {n:"Paint entry door", mat:15, qty:1, hrs:1},
+        {n:"Repair drywall patch on ceiling", mat:45, qty:1, hrs:3},
+        {n:"Paint ceiling patch", mat:15, qty:1, hrs:1},
+        {n:"Install baseboards (16 LF)", mat:40, qty:1, hrs:4},
+        {n:"Paint floor and stairs", mat:50, qty:1, hrs:4},
+        {n:"Install code-compliant railing", mat:120, qty:1, hrs:3},
+      ],
+      "Front Room (Small)": [
+        {n:"Finish trim, caulk, paint trim", mat:30, qty:1, hrs:4},
+        {n:"Paint room + ceiling", mat:90, qty:1, hrs:8},
+        {n:"Prime wood trim with shellac primer", mat:45, qty:1, hrs:3},
+        {n:"Trim and repair door", mat:25, qty:1, hrs:2},
+        {n:"Paint closet", mat:20, qty:1, hrs:2},
+        {n:"Trim out front window", mat:30, qty:1, hrs:2},
+      ],
+      "Front / Living Room": [
+        {n:"Install closet door (slab + hardware)", mat:110, qty:1, hrs:2},
+        {n:"Install blinds", mat:60, qty:1, hrs:1},
+        {n:"Install window screen", mat:25, qty:1, hrs:1},
+      ],
+      "Bedroom 1": [
+        {n:"Foam gaps and trim out window", mat:30, qty:1, hrs:2},
+        {n:"Caulk and paint trim", mat:20, qty:1, hrs:2},
+        {n:"Paint vent", mat:5, qty:1, hrs:0.5},
+        {n:"Caulk and paint door", mat:15, qty:1, hrs:1.5},
+      ],
+      "Hallway": [
+        {n:"Paint trim", mat:20, qty:1, hrs:2},
+        {n:"Reinstall door leading to basement", mat:15, qty:1, hrs:1.5},
+      ],
+      "Bathroom": [
+        {n:"Trim door to close", mat:10, qty:1, hrs:1},
+        {n:"Trim closet door to close", mat:10, qty:1, hrs:1},
+        {n:"Paint closet", mat:15, qty:1, hrs:1},
+        {n:"Paint bathroom", mat:50, qty:1, hrs:4},
+      ],
+      "Bedroom 2": [
+        {n:"Trim door to close", mat:10, qty:1, hrs:1},
+        {n:"Paint closet", mat:15, qty:1, hrs:1.5},
+        {n:"Install and trim out window (x2)", mat:220, qty:1, hrs:5},
+        {n:"Paint room", mat:70, qty:1, hrs:6},
+        {n:"Install baseboard", mat:35, qty:1, hrs:3},
+      ],
+      "Kitchen": [
+        {n:"Paint walls and ceiling", mat:90, qty:1, hrs:8},
+      ],
+      "Bedroom 3": [
+        {n:"Repair drywall", mat:60, qty:1, hrs:4},
+        {n:"Paint", mat:60, qty:1, hrs:5},
+        {n:"Remove molded drywall, replace with new", mat:85, qty:1, hrs:5},
+      ],
+    }
+  },
+  Flooring: {
+    rooms: {
+      "Hallway": [
+        {n:"Repair floor", mat:60, qty:1, hrs:3},
+      ],
+      "Bedroom 2": [
+        {n:"Install carpet (~120 SF incl. pad)", mat:420, qty:1, hrs:4},
+      ],
+    }
+  },
+  Kitchen: {
+    rooms: {
+      "Kitchen": [
+        {n:"Remove upper cabinet next to stove (incl. haul-off)", mat:15, qty:1, hrs:1.5},
+        {n:"Install Luan on back of sink base cabinet", mat:25, qty:1, hrs:1},
+        {n:"Trim and repair cabinet door to fit", mat:20, qty:1, hrs:1.5},
+      ],
+    }
+  },
+  Bathrooms: {
+    rooms: {
+      "Bathroom": [
+        {n:"Install vanity", mat:350, qty:1, hrs:3},
+        {n:"Replumb vanity to add P-trap", mat:35, qty:1, hrs:2},
+        {n:"Install baseboard", mat:25, qty:1, hrs:2},
+        {n:"Install shower valve", mat:180, qty:1, hrs:3},
+        {n:"Install tile shower area (~40 SF)", mat:650, qty:1, hrs:12},
+      ],
+    }
+  },
+  Exterior: {
+    rooms: {
+      "Bedroom 1": [
+        {n:"Trim exterior of door", mat:30, qty:1, hrs:2},
+      ],
+    }
+  },
+};
+
+const FEES_DEFAULT = [
+  {id:"occ", n:"Occupancy Permit", val:150, on:true},
+  {id:"dump", n:"Dumpster", val:450, on:true},
+  {id:"bldg", n:"Building Permit", val:850, on:false},
+  {id:"elec", n:"Electrical Permit", val:250, on:false},
+];
+const DEMO_RATE = 4; // $/sqft, off by default (no demo sqft specified in scope)
+
+const tabOrder = ["Framing","Finishes","Flooring","Kitchen","Bathrooms","Exterior","Fees","Summary"];
+
+function fmt(n){ return "$" + n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+function buildNav(){
+  const nav = document.getElementById("tabnav");
+  tabOrder.forEach((t,i)=>{
+    const b = document.createElement("button");
+    b.textContent = t;
+    b.dataset.tab = t;
+    if(i===0) b.classList.add("active");
+    b.onclick = ()=>showTab(t);
+    nav.appendChild(b);
+  });
+}
+
+function showTab(t){
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active", b.dataset.tab===t));
+  document.querySelectorAll(".tab").forEach(d=>d.classList.toggle("active", d.id==="tab-"+t));
+  if(t==="Summary") renderSummary();
+}
+
+function buildScopeTab(tabName){
+  const div = document.createElement("div");
+  div.className = "tab";
+  div.id = "tab-"+tabName;
+  const h = document.createElement("h2");
+  h.textContent = tabName + " — Scope & Cost Detail";
+  div.appendChild(h);
+
+  const scope = DATA[tabName];
+  if(scope.note){
+    const p = document.createElement("p");
+    p.className = "note";
+    p.textContent = scope.note;
+    div.appendChild(p);
+  }
+
+  Object.keys(scope.rooms).forEach(room=>{
+    const items = scope.rooms[room];
+    const box = document.createElement("div");
+    box.className = "room";
+    box.innerHTML = `<h3>${room}</h3>`;
+    const table = document.createElement("table");
+    table.innerHTML = `<thead><tr>
+        <th>Item</th><th class="num">Qty</th><th class="num">Mat $/unit</th>
+        <th class="num">Material</th><th class="num">Labor Hrs</th><th class="num">Labor $</th><th class="num">Total</th><th></th>
+      </tr></thead><tbody></tbody>`;
+    const tbody = table.querySelector("tbody");
+    items.forEach((item,idx)=>{
+      const rowId = tabName+"-"+room+"-"+idx;
+      const tr = buildRow(item.n, item.qty, item.mat, item.hrs, rowId);
+      tbody.appendChild(tr);
+    });
+    box.appendChild(table);
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "addBtn";
+    addBtn.textContent = "+ Add line item";
+    addBtn.onclick = ()=>{
+      const rowId = tabName+"-"+room+"-new"+Date.now();
+      const tr = buildRow("New item", 1, 0, 0, rowId);
+      tbody.appendChild(tr);
+      recalcTab(tabName);
+    };
+    box.appendChild(addBtn);
+    div.appendChild(box);
+  });
+
+  const foot = document.createElement("div");
+  foot.className = "tabfoot";
+  foot.innerHTML = `
+    <div><span>Material (+10% waste)</span><b id="mat-${tabName}">$0.00</b></div>
+    <div><span>Labor</span><b id="labor-${tabName}">$0.00</b></div>
+    <div><span>Tab Total</span><b id="total-${tabName}">$0.00</b></div>
+  `;
+  div.appendChild(foot);
+
+  document.getElementById("tabcontent").appendChild(div);
+}
+
+function buildRow(name, qty, matUnit, hrs, rowId){
+  const tr = document.createElement("tr");
+  tr.dataset.rowId = rowId;
+  tr.innerHTML = `
+    <td><input class="itemname" type="text" value="${name}" data-role="name" data-row="${rowId}"></td>
+    <td class="num"><input class="qty" type="number" step="0.5" min="0" value="${qty}" data-role="qty" data-row="${rowId}"></td>
+    <td class="num"><input class="matunit" type="number" step="0.01" min="0" value="${matUnit}" data-role="matunit" data-row="${rowId}"></td>
+    <td class="num" data-role="matTotal" data-row="${rowId}">--</td>
+    <td class="num"><input class="hrs" type="number" step="0.5" min="0" value="${hrs}" data-role="hrs" data-row="${rowId}"></td>
+    <td class="num" data-role="laborTotal" data-row="${rowId}">--</td>
+    <td class="num" data-role="lineTotal" data-row="${rowId}">--</td>
+    <td class="delcol"><button type="button" class="delBtn" title="Remove item" onclick="deleteRow(this)">✕</button></td>
+  `;
+  return tr;
+}
+
+function deleteRow(btn){
+  const tr = btn.closest("tr");
+  const tabDiv = btn.closest(".tab");
+  const tabName = tabDiv.id.replace("tab-","");
+  tr.remove();
+  recalcTab(tabName);
+}
+
+function recalcTab(tabName){
+  let matSum = 0, laborSum = 0;
+  const div = document.getElementById("tab-"+tabName);
+  if(!div) return {mat:0, labor:0, total:0};
+  div.querySelectorAll("tbody tr").forEach(tr=>{
+    const qtyInput = tr.querySelector('[data-role="qty"]');
+    const hrsInput = tr.querySelector('[data-role="hrs"]');
+    const matUnitInput = tr.querySelector('[data-role="matunit"]');
+    const qty = parseFloat(qtyInput.value) || 0;
+    const hrs = parseFloat(hrsInput.value) || 0;
+    const matUnit = parseFloat(matUnitInput.value) || 0;
+    const matRaw = matUnit * qty;
+    const matWithWaste = matRaw * (1 + WASTE);
+    const laborCost = hrs * LABOR_RATE;
+    const lineTotal = matWithWaste + laborCost;
+    tr.querySelector('[data-role="matTotal"]').textContent = fmt(matWithWaste);
+    tr.querySelector('[data-role="laborTotal"]').textContent = fmt(laborCost);
+    tr.querySelector('[data-role="lineTotal"]').textContent = fmt(lineTotal);
+    matSum += matWithWaste;
+    laborSum += laborCost;
+  });
+  const total = matSum + laborSum;
+  const matEl = document.getElementById("mat-"+tabName);
+  const laborEl = document.getElementById("labor-"+tabName);
+  const totalEl = document.getElementById("total-"+tabName);
+  if(matEl){ matEl.textContent = fmt(matSum); laborEl.textContent = fmt(laborSum); totalEl.textContent = fmt(total); }
+  return {mat:matSum, labor:laborSum, total};
+}
+
+function buildFeesTab(){
+  const div = document.createElement("div");
+  div.className = "tab";
+  div.id = "tab-Fees";
+  div.innerHTML = `<h2>Fees & General Conditions</h2><div class="fees" id="feesList"></div>
+    <div class="row" style="margin-top:14px;">
+      <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" id="demoOn"> Demo (per SF)</label>
+      <span><input type="number" id="demoSqft" value="0" style="width:80px;"> SF × $${DEMO_RATE}/SF = <b id="demoTotal">$0.00</b></span>
+    </div>
+    <div class="tabfoot"><div><span>Fees Total</span><b id="total-Fees">$0.00</b></div></div>`;
+  document.getElementById("tabcontent").appendChild(div);
+
+  const list = div.querySelector("#feesList");
+  FEES_DEFAULT.forEach(f=>{
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `<label><input type="checkbox" data-fee="${f.id}" ${f.on?"checked":""}> ${f.n}</label>
+      <input type="number" data-feeval="${f.id}" value="${f.val}">`;
+    list.appendChild(row);
+  });
+  div.addEventListener("input", recalcFees);
+  div.addEventListener("change", recalcFees);
+}
+
+function recalcFees(){
+  let total = 0;
+  FEES_DEFAULT.forEach(f=>{
+    const cb = document.querySelector(`[data-fee="${f.id}"]`);
+    const val = parseFloat(document.querySelector(`[data-feeval="${f.id}"]`).value) || 0;
+    if(cb && cb.checked) total += val;
+  });
+  const demoOn = document.getElementById("demoOn").checked;
+  const demoSqft = parseFloat(document.getElementById("demoSqft").value) || 0;
+  const demoTotal = demoOn ? demoSqft * DEMO_RATE : 0;
+  document.getElementById("demoTotal").textContent = fmt(demoTotal);
+  total += demoTotal;
+  document.getElementById("total-Fees").textContent = fmt(total);
+  return total;
+}
+
+function buildSummaryTab(){
+  const div = document.createElement("div");
+  div.className = "tab";
+  div.id = "tab-Summary";
+  div.innerHTML = `<h2>Project Summary</h2>
+    <table id="summary">
+      <thead><tr><th>Scope</th><th class="num">Material (w/ waste)</th><th class="num">Labor</th><th class="num">Subtotal</th></tr></thead>
+      <tbody id="summaryBody"></tbody>
+      <tfoot>
+        <tr><td>Fees & General Conditions</td><td class="num"></td><td class="num"></td><td class="num" id="sumFees">$0.00</td></tr>
+        <tr class="grand"><td colspan="3">GRAND TOTAL</td><td class="num" id="grandTotal">$0.00</td></tr>
+      </tfoot>
+    </table>
+
+    <div class="mult-box">
+      <label>Conservative multiplier
+        <input type="number" step="0.01" id="conMult" value="1.00" onchange="renderSummary()">
+      </label>
+      <label>Full scope multiplier
+        <input type="number" step="0.01" id="fullMult" value="1.15" onchange="renderSummary()">
+      </label>
+      <span class="note" style="margin:0;">Applied to Grand Total to set the two client-facing price points (mat+labor low / mat+labor high).</span>
+    </div>
+
+    <button class="genBtn" onclick="generateClientEstimate()">Generate Client-Facing Estimate →</button>`;
+  document.getElementById("tabcontent").appendChild(div);
+}
+
+let CURRENT_GRAND_TOTAL = 0;
+
+function renderSummary(){
+  const body = document.getElementById("summaryBody");
+  body.innerHTML = "";
+  let grand = 0;
+  ["Framing","Finishes","Flooring","Kitchen","Bathrooms","Exterior"].forEach(t=>{
+    const r = recalcTab(t);
+    grand += r.total;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${t}</td><td class="num">${fmt(r.mat)}</td><td class="num">${fmt(r.labor)}</td><td class="num">${fmt(r.total)}</td>`;
+    body.appendChild(tr);
+  });
+  const fees = recalcFees();
+  grand += fees;
+  document.getElementById("sumFees").textContent = fmt(fees);
+  document.getElementById("grandTotal").textContent = fmt(grand);
+  CURRENT_GRAND_TOTAL = grand;
+}
+
+function closeClientView(){
+  document.getElementById("clientView").classList.remove("active");
+}
+
+function generateClientEstimate(){
+  renderSummary(); // ensure totals are fresh
+  const conMult = parseFloat(document.getElementById("conMult").value) || 1;
+  const fullMult = parseFloat(document.getElementById("fullMult").value) || 1;
+  const conservative = CURRENT_GRAND_TOTAL * conMult;
+  const full = CURRENT_GRAND_TOTAL * fullMult;
+
+  const estNo = document.getElementById("estNo").value;
+  const prop = document.getElementById("prop").value;
+  const proj = document.getElementById("proj").value;
+  const dt = document.getElementById("dt").value;
+  const client = document.getElementById("clientName").value || "—";
+
+  // Build scope checklist from item names only, grouped by tab (no $ shown) — reads LIVE DOM state
+  let checklistHtml = "";
+  ["Framing","Finishes","Flooring","Kitchen","Bathrooms","Exterior"].forEach(t=>{
+    const tabDiv = document.getElementById("tab-"+t);
+    if(!tabDiv) return;
+    const roomBoxes = tabDiv.querySelectorAll(".room");
+    let tabItems = [];
+    roomBoxes.forEach(box=>{
+      const roomName = box.querySelector("h3").textContent;
+      box.querySelectorAll("tbody tr").forEach(tr=>{
+        const nameInput = tr.querySelector('[data-role="name"]');
+        const name = (nameInput.value || "").trim();
+        if(name) tabItems.push(name + " (" + roomName + ")");
+      });
+    });
+    if(tabItems.length === 0) return;
+    checklistHtml += `<div class="checklist"><h4>${t}</h4><ul>${tabItems.map(i=>`<li>${i}</li>`).join("")}</ul></div>`;
+  });
+
+  const feesOn = [];
+  FEES_DEFAULT.forEach(f=>{
+    const cb = document.querySelector(`[data-fee="${f.id}"]`);
+    if(cb && cb.checked) feesOn.push(f.n);
+  });
+  const demoOn = document.getElementById("demoOn").checked;
+  if(demoOn) feesOn.push("Demolition");
+
+  document.getElementById("clientBody").innerHTML = `
+    <div class="bidBlock">
+      <div><b>Estimate #</b> ${estNo}<br><b>Date</b> ${dt}</div>
+      <div><b>Client</b> ${client}<br><b>Property</b> ${prop}</div>
+      <div><b>Project</b> ${proj}</div>
+    </div>
+
+    ${checklistHtml}
+
+    <div class="pricingBox">
+      <div class="opt">
+        <span class="lbl">Conservative Scope<span class="desc">Base scope as outlined above</span></span>
+        <b>${fmt(conservative)}</b>
+      </div>
+      <div class="opt">
+        <span class="lbl">Full Scope<span class="desc">Includes contingency / upgraded finish allowance</span></span>
+        <b>${fmt(full)}</b>
+      </div>
+    </div>
+
+    <p class="note" style="margin-top:8px;">Pricing includes: ${feesOn.length ? feesOn.join(", ") : "no permit/fee line items selected"}. Material and labor breakdowns available upon request.</p>
+
+    <div class="terms">
+      <h4>Terms & Conditions</h4>
+      <p>
+        Payment: 50% deposit due upon signed acceptance, remaining 50% due upon substantial completion.<br>
+        Validity: This estimate is valid for 30 days from the date above.<br>
+        Change Orders: Any changes to the scope of work will be documented and priced separately prior to execution.<br>
+        Site Access: Client to provide reasonable access to the property during normal business hours for the duration of the project.<br>
+        Missouri Construction Service is a licensed and insured general contractor.
+      </p>
+    </div>
+
+    <div class="siglines">
+      <div class="sigline"><div class="line"></div><span>Client Signature / Date</span></div>
+      <div class="sigline"><div class="line"></div><span>Missouri Construction Service / Date</span></div>
+    </div>
+  `;
+
+  document.getElementById("clientView").classList.add("active");
+  window.scrollTo(0,0);
+}
+
+// ---- init ----
+buildNav();
+tabOrder.forEach(t=>{
+  if(t==="Fees"){ buildFeesTab(); }
+  else if(t==="Summary"){ buildSummaryTab(); }
+  else { buildScopeTab(t); }
+});
+document.getElementById("tabcontent").addEventListener("input", (e)=>{
+  const row = e.target.closest("tr");
+  if(row){ const tabDiv = e.target.closest(".tab"); recalcTab(tabDiv.id.replace("tab-","")); }
+});
+tabOrder.forEach(t=>{ if(t!=="Fees" && t!=="Summary") recalcTab(t); });
+recalcFees();
+showTab("Framing");
+</script>
+</body>
+</html>
