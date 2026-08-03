@@ -193,6 +193,7 @@
   <ul class="sb-nav">
     <li><a onclick="showView('inquiries')" id="nav-inquiries"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Inquiries</a></li>
     <li><a onclick="showView('quotes')" id="nav-quotes"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>Quote Requests</a></li>
+    <li><a onclick="showView('applications')" id="nav-applications"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>Applications</a></li>
   </ul>
   <div class="sb-label">Tools</div>
   <ul class="sb-nav">
@@ -330,6 +331,26 @@
             <p style="font-size:13px;color:var(--slate);margin-bottom:16px">Edit <code>siteprotect.php</code> on your server and update the <code>SITE_PASSWORD</code> constant. To disable site protection, remove the 5 TEMP lines from <code>.htaccess</code>.</p>
             <div style="background:var(--light);border-radius:8px;padding:12px;font-family:monospace;font-size:12px;color:var(--dark)">define('SITE_PASSWORD', 'your-new-password');</div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPLICATIONS -->
+    <div id="view-applications" class="view">
+      <div class="tab-row">
+        <button class="tab-pill active" onclick="filterApps('all',this)">All</button>
+        <button class="tab-pill" onclick="filterApps('new',this)">New</button>
+        <button class="tab-pill" onclick="filterApps('reviewed',this)">Reviewed</button>
+        <button class="tab-pill" onclick="filterApps('interview',this)">Interview</button>
+        <button class="tab-pill" onclick="filterApps('hired',this)">Hired</button>
+        <button class="tab-pill" onclick="filterApps('rejected',this)">Rejected</button>
+      </div>
+      <div class="card">
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Contact</th><th>Position</th><th>Experience</th><th>Type</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="app-tbody"></tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -487,6 +508,20 @@
   </div>
 </div>
 
+<!-- APPLICATION DETAIL MODAL -->
+<div class="modal-overlay" id="app-modal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h2 id="app-modal-title">Application</h2>
+      <button class="modal-close" onclick="closeModal('app-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="app-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('app-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- CONFIRM DELETE MODAL -->
 <div class="modal-overlay" id="confirm-modal">
   <div class="modal confirm-modal">
@@ -556,8 +591,8 @@ function updateTime() {
 }
 
 // ─── Navigation ───────────────────────────────────────────────
-const viewTitles = { dashboard:'Dashboard', blog:'Blog Posts', projects:'Projects', testimonials:'Testimonials', inquiries:'Inquiries', quotes:'Quote Requests', settings:'Settings', estimator:'Rehab Estimator' };
-const viewLoaders = { dashboard:loadDashboard, blog:loadBlog, projects:loadProjects, testimonials:loadTestimonials, inquiries:loadInquiries, quotes:loadQuotes, settings:loadSettings };
+const viewTitles = { dashboard:'Dashboard', blog:'Blog Posts', projects:'Projects', testimonials:'Testimonials', inquiries:'Inquiries', quotes:'Quote Requests', applications:'Applications', settings:'Settings', estimator:'Rehab Estimator' };
+const viewLoaders = { dashboard:loadDashboard, blog:loadBlog, projects:loadProjects, testimonials:loadTestimonials, inquiries:loadInquiries, quotes:loadQuotes, applications:loadApplications, settings:loadSettings };
 const topbarActions = { blog:['+ New Post', () => openBlogModal()], projects:['+ New Project', () => openProjModal()], testimonials:['+ New Testimonial', () => openTestModal()] };
 
 function showView(v) {
@@ -997,6 +1032,95 @@ async function uploadMultiImg(input, type) {
 function removeImg(previewId, hiddenId) {
   $(previewId).style.display = 'none';
   $(hiddenId).value = '';
+}
+
+// ─── Applications ─────────────────────────────────────────────
+let allApps = [], appFilter = 'all';
+
+async function loadApplications() {
+  try {
+    const d = await api('/api/admin/inquiries?section=applications');
+    allApps = d.applications || [];
+    renderApps();
+    updateTime();
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function filterApps(f, btn) {
+  appFilter = f;
+  document.querySelectorAll('#view-applications .tab-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderApps();
+}
+
+function appStatusBadge(s) {
+  const map = { new:'badge-new', reviewed:'badge-draft', interview:'badge-orange', hired:'badge-published', rejected:'badge-hidden' };
+  return `<span class="badge ${map[s]||'badge-draft'}">${s}</span>`;
+}
+
+function renderApps() {
+  const rows = appFilter === 'all' ? allApps : allApps.filter(a => a.status === appFilter);
+  $('app-tbody').innerHTML = rows.length ? rows.map(a => `
+    <tr>
+      <td class="td-bold">${esc(a.name)}</td>
+      <td><a href="mailto:${esc(a.email)}" style="color:var(--orange)">${esc(a.email)}</a>${a.phone?`<br><span class="td-muted">${esc(a.phone)}</span>`:''}</td>
+      <td>${a.position?`<span class="badge badge-orange">${esc(a.position)}</span>`:'—'}</td>
+      <td class="td-muted">${esc(a.experience||'—')}</td>
+      <td class="td-muted">${esc(a.employmentType||'—')}</td>
+      <td class="td-muted">${fmtDate(a.createdAt)}</td>
+      <td>
+        <select class="status-sel" onchange="updateAppStatus(${a.id},this.value)">
+          ${['new','reviewed','interview','hired','rejected'].map(s=>`<option value="${s}"${a.status===s?' selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+        </select>
+      </td>
+      <td><button class="btn btn-ghost btn-sm" onclick="viewApp(${a.id})">View</button></td>
+    </tr>`).join('')
+    : `<tr><td colspan="8" class="empty"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>No applications yet.</td></tr>`;
+}
+
+async function updateAppStatus(id, status) {
+  try {
+    await api('/api/admin/inquiries?section=applications&id=' + id, {method:'PATCH', body:JSON.stringify({status})});
+    const a = allApps.find(x => x.id === id);
+    if (a) a.status = status;
+    toast('Status updated.');
+  } catch(e) { toast(e.message,'error'); }
+}
+
+function viewApp(id) {
+  const a = allApps.find(x => x.id === id);
+  if (!a) return;
+  $('app-modal-title').textContent = esc(a.name) + ' — Application';
+  const portfolioHtml = (a.portfolioUrls||[]).length
+    ? `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px">${a.portfolioUrls.map(u=>`<a href="${esc(u)}" target="_blank"><img src="${esc(u)}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--border)" onerror="this.style.display='none'" /></a>`).join('')}</div>`
+    : '<span style="color:var(--slate);font-size:13px">None uploaded</span>';
+  const resumeHtml = a.resumeUrl
+    ? `<a href="${esc(a.resumeUrl)}" target="_blank" class="btn btn-ghost btn-sm">📄 Download Resume</a>`
+    : '<span style="color:var(--slate);font-size:13px">None uploaded</span>';
+  $('app-modal-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
+      <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:4px">Email</div><a href="mailto:${esc(a.email)}" style="color:var(--orange)">${esc(a.email)}</a></div>
+      <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:4px">Phone</div>${esc(a.phone||'—')}</div>
+      <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:4px">Position</div>${esc(a.position||'—')}</div>
+      <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:4px">Experience</div>${esc(a.experience||'—')}</div>
+      <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:4px">Employment Type</div>${esc(a.employmentType||'—')}</div>
+      <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:4px">Availability</div>${esc(a.availability||'—')}</div>
+      <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:4px">Licensed</div>${a.licensed?'Yes':'No'}${a.licenseDetails?` — ${esc(a.licenseDetails)}`:''}</div>
+      <div><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:4px">Applied</div>${fmtDate(a.createdAt)}</div>
+    </div>
+    <div style="margin-bottom:18px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:6px">About / Cover Letter</div>
+      <div style="background:var(--light);border-radius:8px;padding:14px;font-size:13px;line-height:1.7;white-space:pre-wrap">${esc(a.about||'—')}</div>
+    </div>
+    <div style="margin-bottom:18px">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:6px">Portfolio Photos</div>
+      ${portfolioHtml}
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);margin-bottom:6px">Resume</div>
+      ${resumeHtml}
+    </div>`;
+  openModal('app-modal');
 }
 
 // ─── Auth ─────────────────────────────────────────────────────

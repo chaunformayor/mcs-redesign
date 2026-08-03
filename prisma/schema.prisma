@@ -96,6 +96,26 @@ model Testimonial {
   @@map("testimonials")
 }
 
+model JobApplication {
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String
+  phone          String?
+  position       String?
+  experience     String?
+  availability   String?
+  employmentType String?  @map("employment_type")
+  licensed       Boolean  @default(false)
+  licenseDetails String?  @map("license_details") @db.Text
+  about          String?  @db.Text
+  portfolioUrls  String[] @map("portfolio_urls")
+  resumeUrl      String?  @map("resume_url")
+  status         String   @default("new")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("job_applications")
+}
+
 model SiteSetting {
   id           Int      @id @default(autoincrement())
   settingKey   String   @unique @map("setting_key")

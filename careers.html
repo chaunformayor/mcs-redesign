@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Careers — Missouri Construction Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    body { padding-top: var(--nav-h); }
+
+    /* ── Perks grid ── */
+    .perks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .perk-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 28px 24px; }
+    .perk-icon { width: 48px; height: 48px; background: rgba(201,168,76,.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .perk-icon svg { width: 24px; height: 24px; fill: var(--gold); }
+    .perk-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--navy); }
+    .perk-card p { font-size: 14px; color: var(--slate); line-height: 1.6; }
+
+    /* ── Application form ── */
+    .apply-wrap { max-width: 720px; margin: 0 auto; }
+    .step-progress { display: flex; align-items: center; gap: 0; margin-bottom: 40px; }
+    .step-dot { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; position: relative; }
+    .step-dot:not(:last-child)::after { content: ''; position: absolute; top: 16px; left: 50%; width: 100%; height: 2px; background: var(--border); z-index: 0; }
+    .step-dot.done::after { background: var(--gold); }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--border); color: var(--slate); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; transition: all .3s; }
+    .step-dot.active .step-num { background: var(--gold); color: var(--navy); }
+    .step-dot.done .step-num { background: var(--navy); color: white; }
+    .step-label { font-size: 11px; font-weight: 600; color: var(--slate); text-transform: uppercase; letter-spacing: .06em; text-align: center; }
+    .step-dot.active .step-label { color: var(--gold); }
+    .step-dot.done .step-label { color: var(--navy); }
+
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    .step-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .step-sub { font-size: 14px; color: var(--slate); margin-bottom: 28px; }
+
+    .form-group label { color: var(--navy); font-weight: 600; font-size: 13px; display: block; margin-bottom: 5px; }
+    .form-group input, .form-group select, .form-group textarea {
+      border: 1.5px solid var(--border); border-radius: 8px; padding: 11px 14px;
+      font-size: 14px; font-family: inherit; color: var(--navy); width: 100%;
+      background: white; outline: none; transition: border-color .2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.12);
+    }
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* toggle yes/no */
+    .toggle-group { display: flex; gap: 10px; }
+    .toggle-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 8px; background: white; font-size: 13px; font-weight: 600; color: var(--slate); cursor: pointer; transition: all .2s; text-align: center; }
+    .toggle-btn.active { border-color: var(--gold); background: rgba(201,168,76,.08); color: var(--navy); }
+
+    /* file upload */
+    .file-drop { border: 2px dashed var(--border); border-radius: 12px; padding: 32px 20px; text-align: center; cursor: pointer; transition: all .2s; background: var(--off-white); }
+    .file-drop:hover, .file-drop.drag-over { border-color: var(--gold); background: rgba(201,168,76,.05); }
+    .file-drop svg { width: 36px; height: 36px; fill: var(--gold); opacity: .6; margin: 0 auto 10px; display: block; }
+    .file-drop h4 { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+    .file-drop p { font-size: 12px; color: var(--slate); }
+    .file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+    .file-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: white; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
+    .file-item svg { width: 16px; height: 16px; fill: var(--gold); flex-shrink: 0; }
+    .file-item span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--navy); }
+    .file-item .rm { background: none; border: none; cursor: pointer; color: var(--slate); font-size: 16px; padding: 0 4px; line-height: 1; }
+    .file-item .rm:hover { color: #dc2626; }
+
+    .step-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .btn-step-back { background: none; border: 1.5px solid var(--border); color: var(--slate); padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .2s; }
+    .btn-step-back:hover { border-color: var(--navy); color: var(--navy); }
+    .btn-step-next { background: var(--gold); color: var(--navy); padding: 11px 32px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: all .2s; }
+    .btn-step-next:hover { background: var(--gold-dark); }
+    .btn-step-next:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* success */
+    .apply-success { display: none; text-align: center; padding: 60px 20px; }
+    .apply-success .check { width: 72px; height: 72px; background: rgba(16,185,129,.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+    .apply-success .check svg { width: 36px; height: 36px; fill: var(--green); }
+    .apply-success h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--navy); margin-bottom: 10px; }
+    .apply-success p { color: var(--slate); max-width: 420px; margin: 0 auto 28px; }
+
+    .upload-progress { display: none; background: rgba(201,168,76,.08); border: 1px solid rgba(201,168,76,.25); border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; font-size: 13px; color: var(--navy); }
+    .upload-progress.show { display: block; }
+
+    @media (max-width: 768px) {
+      .perks-grid { grid-template-columns: 1fr; }
+      .form-row-2 { grid-template-columns: 1fr; }
+      .step-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div>
+    <div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a><a href="/about">About</a><a href="/services">Services</a><a href="/portfolio">Portfolio</a><a href="/blog">Blog</a><a href="/careers" class="active">Careers</a><a href="/contact">Contact</a>
+    <a href="/contact" class="nav-cta">Request Quote</a>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="/">Home</a><span class="sep">›</span><span>Careers</span></div>
+    <div class="page-hero-label">Join Our Team</div>
+    <h1>Build Something <em>Bigger</em><br>Than a Paycheck</h1>
+    <p>Missouri Construction Service has been growing for 25+ years. We're always looking for skilled tradespeople who take pride in their craft and want to be part of a trusted team.</p>
+  </div>
+</div>
+
+<!-- WHY WORK WITH US -->
+<section style="background: var(--off-white);">
+  <div class="container">
+    <div class="section-header center">
+      <div class="section-label">Why MCS</div>
+      <h2 class="section-title">Why Work With Us</h2>
+      <p class="section-sub">We treat our crew like family — competitive pay, steady work, and a company that's been around long enough to prove it.</p>
+    </div>
+    <div class="perks-grid">
+      <div class="perk-card">
+        <div class="perk-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+        <h3>Competitive Pay</h3>
+        <p>We pay above market rates for skilled trades. Your experience and certifications are rewarded from day one.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg></div>
+        <h3>Steady Work Year-Round</h3>
+        <p>No seasonal layoffs. Our project pipeline stays full — commercial and residential across the St. Louis metro.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+        <h3>Licensed & Insured Team</h3>
+        <p>You'll work with professionals who do it right. No shortcuts, no drama — just quality work you can be proud of.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+        <h3>Team Culture</h3>
+        <p>25+ years of working together means we know how to build a crew that communicates, respects each other, and gets results.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div>
+        <h3>Grow Your Skills</h3>
+        <p>Work across every trade — roofing, framing, plumbing, electrical. The variety keeps you sharp and growing.</p>
+      </div>
+      <div class="perk-card">
+        <div class="perk-icon"><svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z M17.5 13C15 13 13 15 13 17.5S15 22 17.5 22 22 20 22 17.5 20 13 17.5 13zM3 13.5h8v8H3z"/></svg></div>
+        <h3>Diverse Projects</h3>
+        <p>From single-family flips to large commercial rehabs — no two weeks are the same, and every project builds your portfolio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATION FORM -->
+<section id="apply" style="background: white;">
+  <div class="container">
+    <div class="apply-wrap">
+      <div class="section-header center" style="margin-bottom:36px">
+        <div class="section-label">Apply Now</div>
+        <h2 class="section-title">Submit Your Application</h2>
+        <p class="section-sub">Fill out the form below. We review every application and will reach out within 3–5 business days.</p>
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="apply-success" id="apply-success">
+        <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+        <h2>Application Received!</h2>
+        <p>Thanks for your interest in joining the MCS team. We'll review your application and be in touch within 3–5 business days.</p>
+        <a href="/" class="btn-primary">Back to Home</a>
+      </div>
+
+      <!-- FORM -->
+      <div id="apply-form-wrap">
+
+        <!-- Progress Steps -->
+        <div class="step-progress">
+          <div class="step-dot active" id="sdot-1"><div class="step-num">1</div><div class="step-label">Personal</div></div>
+          <div class="step-dot" id="sdot-2"><div class="step-num">2</div><div class="step-label">Position</div></div>
+          <div class="step-dot" id="sdot-3"><div class="step-num">3</div><div class="step-label">About You</div></div>
+          <div class="step-dot" id="sdot-4"><div class="step-num">4</div><div class="step-label">Upload</div></div>
+        </div>
+
+        <!-- STEP 1: Personal Info -->
+        <div class="step-panel active" id="step-1">
+          <h3 class="step-title">Personal Information</h3>
+          <p class="step-sub">Let us know how to reach you.</p>
+          <div class="form-group">
+            <label>Full Name <span style="color:var(--gold)">*</span></label>
+            <input type="text" id="f-name" placeholder="John Smith" />
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>Email Address <span style="color:var(--gold)">*</span></label>
+              <input type="email" id="f-email" placeholder="you@email.com" />
+            </div>
+            <div class="form-group">
+              <label>Phone Number <span style="color:var(--gold)">*</span></label>
+              <input type="tel" id="f-phone" placeholder="(314) 555-0000" />
+            </div>
+          </div>
+          <div class="step-nav">
+            <span></span>
+            <button class="btn-step-next" onclick="goStep(2)">Next: Position →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Position Details -->
+        <div class="step-panel" id="step-2">
+          <h3 class="step-title">Position &amp; Experience</h3>
+          <p class="step-sub">Tell us what you do and what you're looking for.</p>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>Position Applying For <span style="color:var(--gold)">*</span></label>
+              <select id="f-position">
+                <option value="">— Select position —</option>
+                <option>General Laborer</option>
+                <option>Carpenter / Framer</option>
+                <option>Roofer</option>
+                <option>Plumber</option>
+                <option>Electrician</option>
+                <option>Painter</option>
+                <option>Flooring / Tile</option>
+                <option>HVAC Technician</option>
+                <option>Project Manager</option>
+                <option>Office / Admin</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Years of Experience <span style="color:var(--gold)">*</span></label>
+              <select id="f-experience">
+                <option value="">— Select —</option>
+                <option>Less than 1 year</option>
+                <option>1–3 years</option>
+                <option>3–5 years</option>
+                <option>5–10 years</option>
+                <option>10+ years</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>Employment Type <span style="color:var(--gold)">*</span></label>
+              <select id="f-employment">
+                <option value="">— Select —</option>
+                <option>Full-time</option>
+                <option>Part-time</option>
+                <option>Either / Flexible</option>
+                <option>Subcontractor / 1099</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Availability to Start <span style="color:var(--gold)">*</span></label>
+              <select id="f-availability">
+                <option value="">— Select —</option>
+                <option>Immediately</option>
+                <option>2 weeks notice</option>
+                <option>1 month</option>
+                <option>Flexible</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Licensed or Certified?</label>
+            <div class="toggle-group" style="margin-top:4px">
+              <button type="button" class="toggle-btn active" id="lic-no" onclick="setLicensed(false)">No</button>
+              <button type="button" class="toggle-btn" id="lic-yes" onclick="setLicensed(true)">Yes</button>
+            </div>
+          </div>
+          <div class="form-group" id="lic-details-wrap" style="display:none">
+            <label>License / Certification Details</label>
+            <input type="text" id="f-license" placeholder="e.g. Missouri Electrical License #12345" />
+          </div>
+          <div class="step-nav">
+            <button class="btn-step-back" onclick="goStep(1)">← Back</button>
+            <button class="btn-step-next" onclick="goStep(3)">Next: About You →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: About You -->
+        <div class="step-panel" id="step-3">
+          <h3 class="step-title">Tell Us About Yourself</h3>
+          <p class="step-sub">This is your chance to stand out. Be specific — we read every application.</p>
+          <div class="form-group">
+            <label>Why do you want to work at MCS? <span style="color:var(--gold)">*</span></label>
+            <textarea id="f-about" rows="5" placeholder="What draws you to MCS? What kind of work environment are you looking for?"></textarea>
+          </div>
+          <div class="step-nav">
+            <button class="btn-step-back" onclick="goStep(2)">← Back</button>
+            <button class="btn-step-next" onclick="goStep(4)">Next: Upload Files →</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Uploads -->
+        <div class="step-panel" id="step-4">
+          <h3 class="step-title">Upload Your Files</h3>
+          <p class="step-sub">Share photos of your previous work and your resume. Both are optional but strongly encouraged.</p>
+
+          <div class="form-group">
+            <label>Portfolio Photos <span style="color:var(--slate);font-weight:400">(up to 5 images — JPG, PNG, WebP)</span></label>
+            <div class="file-drop" id="portfolio-drop" onclick="document.getElementById('f-portfolio').click()">
+              <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+              <h4>Click to select photos</h4>
+              <p>Show us your best work — completed projects, before/afters, anything you're proud of</p>
+            </div>
+            <input type="file" id="f-portfolio" accept="image/jpeg,image/png,image/webp,image/gif" multiple style="display:none" onchange="handlePortfolio(this)" />
+            <div class="file-list" id="portfolio-list"></div>
+          </div>
+
+          <div class="form-group" style="margin-top:24px">
+            <label>Resume <span style="color:var(--slate);font-weight:400">(PDF, DOC, or DOCX — max 10 MB)</span></label>
+            <div class="file-drop" id="resume-drop" onclick="document.getElementById('f-resume').click()">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM9 13h6v2H9zm0-4h3v2H9zm0 8h6v2H9z"/></svg>
+              <h4>Click to select resume</h4>
+              <p>PDF, Word document, or any standard format</p>
+            </div>
+            <input type="file" id="f-resume" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none" onchange="handleResume(this)" />
+            <div class="file-list" id="resume-list"></div>
+          </div>
+
+          <div class="upload-progress" id="upload-progress">⏳ Submitting your application — please wait…</div>
+          <div class="form-error" id="form-err">Something went wrong. Please try again.</div>
+
+          <div class="step-nav">
+            <button class="btn-step-back" onclick="goStep(3)">← Back</button>
+            <button class="btn-step-next" id="submit-btn" onclick="submitApplication()">Submit Application ✓</button>
+          </div>
+        </div>
+
+      </div><!-- /apply-form-wrap -->
+    </div><!-- /apply-wrap -->
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Questions Before Applying?</h2>
+  <p>Give us a call or send a message — we're happy to tell you more about what it's like to work at MCS.</p>
+  <div class="cta-btns">
+    <a href="tel:6362524203" class="btn-white">📞 (636) 252-4203</a>
+    <a href="/contact" class="btn-outline-white">Send a Message</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M13.78 4L9 8.78V11H6L2 15l3 3 4-4h2.22L16 9.22 13.78 4zm-1.41 1.41L14 7.05l-4.59 4.59H8v-1.41l4.37-4.82zM18 8l-2 2 2.5 2.5 2-2L18 8z"/></svg></div><div class="logo-text"><span>Missouri Construction</span><span>Service — St. Louis, MO</span></div></a>
+      <p>Quality craftsmanship across Missouri since 1999.</p>
+    </div>
+    <div><h4>Services</h4><ul><li><a href="/services">General Contracting</a></li><li><a href="/services">Remodeling</a></li><li><a href="/services">Roofing</a></li><li><a href="/services">Plumbing</a></li><li><a href="/services">Electrical</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="/about">About Us</a></li><li><a href="/portfolio">Portfolio</a></li><li><a href="/careers">Careers</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div><h4>Contact Us</h4>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>(636) 252-4203</div>
+      <div class="footer-contact-item"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>info@missouriconstructionservice.com</div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 Missouri Construction Service. All rights reserved.</p><div class="footer-bottom-links"><a href="/privacy">Privacy Policy</a><a href="/contact">Contact</a></div></div>
+</footer>
+
+<script>
+let currentStep = 1;
+let isLicensed = false;
+let portfolioFiles = [];
+let resumeFile = null;
+
+// ── Step navigation ──────────────────────────────────────────
+function goStep(n) {
+  if (n > currentStep && !validateStep(currentStep)) return;
+  const prev = currentStep;
+  currentStep = n;
+
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('sdot-' + i);
+    dot.classList.remove('active', 'done');
+    if (i < n) dot.classList.add('done');
+    else if (i === n) dot.classList.add('active');
+  }
+  window.scrollTo({ top: document.getElementById('apply').offsetTop - 80, behavior: 'smooth' });
+}
+
+function validateStep(n) {
+  if (n === 1) {
+    const name = document.getElementById('f-name').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    if (!name) { alert('Please enter your name.'); return false; }
+    if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return false; }
+    if (!phone) { alert('Please enter your phone number.'); return false; }
+  }
+  if (n === 2) {
+    if (!document.getElementById('f-position').value) { alert('Please select a position.'); return false; }
+    if (!document.getElementById('f-experience').value) { alert('Please select years of experience.'); return false; }
+    if (!document.getElementById('f-employment').value) { alert('Please select employment type.'); return false; }
+    if (!document.getElementById('f-availability').value) { alert('Please select availability.'); return false; }
+  }
+  if (n === 3) {
+    if (!document.getElementById('f-about').value.trim()) { alert('Please tell us a bit about yourself.'); return false; }
+  }
+  return true;
+}
+
+// ── Licensed toggle ──────────────────────────────────────────
+function setLicensed(val) {
+  isLicensed = val;
+  document.getElementById('lic-yes').classList.toggle('active', val);
+  document.getElementById('lic-no').classList.toggle('active', !val);
+  document.getElementById('lic-details-wrap').style.display = val ? 'block' : 'none';
+}
+
+// ── File handling ────────────────────────────────────────────
+function handlePortfolio(input) {
+  const newFiles = Array.from(input.files);
+  for (const f of newFiles) {
+    if (portfolioFiles.length >= 5) break;
+    if (!portfolioFiles.some(x => x.name === f.name && x.size === f.size)) {
+      portfolioFiles.push(f);
+    }
+  }
+  input.value = '';
+  renderPortfolioList();
+}
+
+function renderPortfolioList() {
+  document.getElementById('portfolio-list').innerHTML = portfolioFiles.map((f, i) => `
+    <div class="file-item">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      <span>${esc(f.name)} <span style="color:var(--slate);font-size:11px">(${(f.size/1024/1024).toFixed(1)} MB)</span></span>
+      <button class="rm" onclick="removePortfolio(${i})" title="Remove">×</button>
+    </div>`).join('');
+}
+
+function removePortfolio(i) {
+  portfolioFiles.splice(i, 1);
+  renderPortfolioList();
+}
+
+function handleResume(input) {
+  resumeFile = input.files[0] || null;
+  input.value = '';
+  renderResumeList();
+}
+
+function renderResumeList() {
+  document.getElementById('resume-list').innerHTML = resumeFile ? `
+    <div class="file-item">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+      <span>${esc(resumeFile.name)} <span style="color:var(--slate);font-size:11px">(${(resumeFile.size/1024/1024).toFixed(1)} MB)</span></span>
+      <button class="rm" onclick="resumeFile=null;renderResumeList()" title="Remove">×</button>
+    </div>` : '';
+}
+
+// ── Drag and drop ────────────────────────────────────────────
+['portfolio-drop', 'resume-drop'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
+  el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+  el.addEventListener('drop', e => {
+    e.preventDefault(); el.classList.remove('drag-over');
+    const files = Array.from(e.dataTransfer.files);
+    if (id === 'portfolio-drop') {
+      for (const f of files) { if (portfolioFiles.length < 5) portfolioFiles.push(f); }
+      renderPortfolioList();
+    } else {
+      resumeFile = files[0] || null;
+      renderResumeList();
+    }
+  });
+});
+
+// ── Submit ───────────────────────────────────────────────────
+async function submitApplication() {
+  if (!validateStep(4)) return;
+
+  const btn = document.getElementById('submit-btn');
+  const progress = document.getElementById('upload-progress');
+  const errEl = document.getElementById('form-err');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  progress.classList.add('show');
+  errEl.classList.remove('show');
+
+  try {
+    const fd = new FormData();
+    fd.append('name', document.getElementById('f-name').value.trim());
+    fd.append('email', document.getElementById('f-email').value.trim());
+    fd.append('phone', document.getElementById('f-phone').value.trim());
+    fd.append('position', document.getElementById('f-position').value);
+    fd.append('experience', document.getElementById('f-experience').value);
+    fd.append('employment_type', document.getElementById('f-employment').value);
+    fd.append('availability', document.getElementById('f-availability').value);
+    fd.append('licensed', isLicensed ? 'yes' : 'no');
+    fd.append('license_details', document.getElementById('f-license').value.trim());
+    fd.append('about', document.getElementById('f-about').value.trim());
+    for (const f of portfolioFiles) fd.append('portfolio', f);
+    if (resumeFile) fd.append('resume', resumeFile);
+
+    const res = await fetch('/api/public?type=apply', { method: 'POST', body: fd });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'Submission failed');
+
+    document.getElementById('apply-form-wrap').style.display = 'none';
+    document.getElementById('apply-success').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('apply').offsetTop - 80, behavior: 'smooth' });
+  } catch (e) {
+    errEl.textContent = e.message || 'Something went wrong. Please try again.';
+    errEl.classList.add('show');
+    btn.disabled = false;
+    btn.textContent = 'Submit Application ✓';
+  } finally {
+    progress.classList.remove('show');
+  }
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
