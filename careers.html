@@ -182,7 +182,8 @@
           <div class="step-dot active" id="sdot-1"><div class="step-num">1</div><div class="step-label">Personal</div></div>
           <div class="step-dot" id="sdot-2"><div class="step-num">2</div><div class="step-label">Position</div></div>
           <div class="step-dot" id="sdot-3"><div class="step-num">3</div><div class="step-label">About You</div></div>
-          <div class="step-dot" id="sdot-4"><div class="step-num">4</div><div class="step-label">Upload</div></div>
+          <div class="step-dot" id="sdot-4"><div class="step-num">4</div><div class="step-label">History</div></div>
+          <div class="step-dot" id="sdot-5"><div class="step-num">5</div><div class="step-label">Upload</div></div>
         </div>
 
         <!-- STEP 1: Personal Info -->
@@ -292,12 +293,30 @@
           </div>
           <div class="step-nav">
             <button class="btn-step-back" onclick="goStep(2)">← Back</button>
-            <button class="btn-step-next" onclick="goStep(4)">Next: Upload Files →</button>
+            <button class="btn-step-next" onclick="goStep(4)">Next: Work History →</button>
           </div>
         </div>
 
-        <!-- STEP 4: Uploads -->
+        <!-- STEP 4: Work History & References -->
         <div class="step-panel" id="step-4">
+          <h3 class="step-title">Work History &amp; References</h3>
+          <p class="step-sub">List your relevant work experience and at least one professional reference.</p>
+          <div class="form-group">
+            <label>Work History <span style="color:var(--gold)">*</span></label>
+            <textarea id="f-work-history" rows="6" placeholder="List your previous employers, roles, and dates. Example:&#10;&#10;ABC Roofing — Lead Roofer (2019–2023)&#10;Installed shingle, metal, and flat roofs on residential/commercial projects.&#10;&#10;XYZ Contractors — General Laborer (2016–2019)&#10;Framing, drywall, demo work across St. Louis metro."></textarea>
+          </div>
+          <div class="form-group" style="margin-top:8px">
+            <label>Professional References <span style="color:var(--gold)">*</span></label>
+            <textarea id="f-references" rows="5" placeholder="List 2–3 professional references (name, company, phone, and relationship). Example:&#10;&#10;Mike Johnson — ABC Roofing, (314) 555-0101, former supervisor&#10;Sarah Williams — XYZ Contractors, (636) 555-0202, former project manager"></textarea>
+          </div>
+          <div class="step-nav">
+            <button class="btn-step-back" onclick="goStep(3)">← Back</button>
+            <button class="btn-step-next" onclick="goStep(5)">Next: Upload Files →</button>
+          </div>
+        </div>
+
+        <!-- STEP 5: Uploads -->
+        <div class="step-panel" id="step-5">
           <h3 class="step-title">Upload Your Files</h3>
           <p class="step-sub">Share photos of your previous work and your resume. Both are optional but strongly encouraged.</p>
 
@@ -327,7 +346,7 @@
           <div class="form-error" id="form-err">Something went wrong. Please try again.</div>
 
           <div class="step-nav">
-            <button class="btn-step-back" onclick="goStep(3)">← Back</button>
+            <button class="btn-step-back" onclick="goStep(4)">← Back</button>
             <button class="btn-step-next" id="submit-btn" onclick="submitApplication()">Submit Application ✓</button>
           </div>
         </div>
@@ -378,7 +397,7 @@ function goStep(n) {
   document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
   document.getElementById('step-' + n).classList.add('active');
 
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 5; i++) {
     const dot = document.getElementById('sdot-' + i);
     dot.classList.remove('active', 'done');
     if (i < n) dot.classList.add('done');
@@ -404,6 +423,10 @@ function validateStep(n) {
   }
   if (n === 3) {
     if (!document.getElementById('f-about').value.trim()) { alert('Please tell us a bit about yourself.'); return false; }
+  }
+  if (n === 4) {
+    if (!document.getElementById('f-work-history').value.trim()) { alert('Please enter your work history.'); return false; }
+    if (!document.getElementById('f-references').value.trim()) { alert('Please enter at least one reference.'); return false; }
   }
   return true;
 }
@@ -500,6 +523,8 @@ async function submitApplication() {
     fd.append('licensed', isLicensed ? 'yes' : 'no');
     fd.append('license_details', document.getElementById('f-license').value.trim());
     fd.append('about', document.getElementById('f-about').value.trim());
+    fd.append('work_history', document.getElementById('f-work-history').value.trim());
+    fd.append('references', document.getElementById('f-references').value.trim());
     for (const f of portfolioFiles) fd.append('portfolio', f);
     if (resumeFile) fd.append('resume', resumeFile);
 

@@ -108,6 +108,8 @@ model JobApplication {
   licensed       Boolean  @default(false)
   licenseDetails String?  @map("license_details") @db.Text
   about          String?  @db.Text
+  workHistory    String?  @map("work_history") @db.Text
+  references     String?  @db.Text
   portfolioUrls  String[] @map("portfolio_urls")
   resumeUrl      String?  @map("resume_url")
   status         String   @default("new")

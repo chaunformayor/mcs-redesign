@@ -104,6 +104,8 @@ export default async function handler(req, res) {
               licensed: f('licensed') === 'yes',
               licenseDetails: f('license_details') || null,
               about: f('about') || null,
+              workHistory: f('work_history') || null,
+              references: f('references') || null,
               portfolioUrls,
               resumeUrl,
             },
