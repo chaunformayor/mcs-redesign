@@ -158,7 +158,7 @@ function renderProjects(filter) {
 
   document.getElementById('gallery').innerHTML = filtered.map((p, i) => {
     const featured = i === 0 || i === 4;
-    const img = p.featured_image || (p.images?.[0]?.image_path) || '';
+    const img = p.featuredImage || (p.images?.[0]?.imagePath) || '';
     return `
       <div class="gallery-item${featured ? ' featured' : ''}" data-category="${esc((p.category||'').toLowerCase())}">
         <div class="gallery-thumb" onclick="openModal(${p.id})">
@@ -176,7 +176,7 @@ function renderProjects(filter) {
 function openModal(id) {
   const p = allProjects.find(x => x.id === id);
   if (!p) return;
-  const img = p.featured_image || (p.images?.[0]?.image_path) || '';
+  const img = p.featuredImage || (p.images?.[0]?.imagePath) || '';
   const mi = document.getElementById('modal-img');
   if (img) {
     mi.style.backgroundImage = `url('${img}')`;
