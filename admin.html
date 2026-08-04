@@ -321,15 +321,12 @@
           <button class="btn btn-primary" onclick="saveSettings()">Save Business Info</button>
         </div>
         <div>
-          <div class="settings-section" style="margin-bottom:20px">
-            <h3>Change Admin Password</h3>
-            <p style="font-size:13px;color:var(--slate);margin-bottom:16px">Edit <code>admin.php</code> on your server and update the <code>ADMIN_PASSWORD</code> constant.</p>
-            <div style="background:var(--light);border-radius:8px;padding:12px;font-family:monospace;font-size:12px;color:var(--dark)">define('ADMIN_PASSWORD', 'your-new-password');</div>
-          </div>
           <div class="settings-section">
-            <h3>Change Site Password</h3>
-            <p style="font-size:13px;color:var(--slate);margin-bottom:16px">Edit <code>siteprotect.php</code> on your server and update the <code>SITE_PASSWORD</code> constant. To disable site protection, remove the 5 TEMP lines from <code>.htaccess</code>.</p>
-            <div style="background:var(--light);border-radius:8px;padding:12px;font-family:monospace;font-size:12px;color:var(--dark)">define('SITE_PASSWORD', 'your-new-password');</div>
+            <h3>Change Admin Password</h3>
+            <div class="form-group"><label>Current Password</label><input type="password" id="pw-current" placeholder="Enter current password" autocomplete="current-password" /></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="pw-new" placeholder="At least 8 characters" autocomplete="new-password" /></div>
+            <div class="form-group"><label>Confirm New Password</label><input type="password" id="pw-confirm" placeholder="Repeat new password" autocomplete="new-password" /></div>
+            <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
           </div>
         </div>
       </div>
@@ -992,6 +989,21 @@ async function saveSettings() {
   const data = { phone:$('set-phone').value, email:$('set-email').value, address:$('set-address').value, hours_weekday:$('set-hours-weekday').value, hours_weekend:$('set-hours-weekend').value };
   try { await api('/api/admin/settings', {method:'POST', body:JSON.stringify(data)}); toast('Settings saved!'); }
   catch(e) { toast(e.message,'error'); }
+}
+
+// ─── Password change ──────────────────────────────────────────
+async function changePassword() {
+  const current = $('pw-current').value;
+  const newPw   = $('pw-new').value;
+  const confirm = $('pw-confirm').value;
+  if (!current || !newPw || !confirm) { toast('All three fields are required.', 'error'); return; }
+  if (newPw.length < 8) { toast('New password must be at least 8 characters.', 'error'); return; }
+  if (newPw !== confirm) { toast('New passwords do not match.', 'error'); return; }
+  try {
+    await api('/api/admin/settings', { method: 'PATCH', body: JSON.stringify({ currentPassword: current, newPassword: newPw }) });
+    toast('Password updated successfully!');
+    $('pw-current').value = ''; $('pw-new').value = ''; $('pw-confirm').value = '';
+  } catch(e) { toast(e.message, 'error'); }
 }
 
 // ─── Image upload ─────────────────────────────────────────────
