@@ -15,6 +15,7 @@
   "rewrites": [
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/admin-login", "destination": "/admin-login.html" },
+    { "source": "/blog", "destination": "/blog-index.html" },
     { "source": "/blog/:slug", "destination": "/blog-post.html" },
     { "source": "/careers", "destination": "/careers.html" }
   ]
