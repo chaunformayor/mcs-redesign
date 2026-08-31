@@ -181,7 +181,7 @@ async function loadBlog() {
         <h2>${esc(featured.title)}</h2>
         <div class="blog-meta"><span>${fmtDate(featured.createdAt)}</span><span class="dot"></span><span>By ${esc(featured.author)}</span></div>
         <p>${esc(featured.excerpt || '')}</p>
-        <a href="/blog/${esc(featured.slug)}" class="btn-primary" style="align-self:flex-start">Read Article →</a>
+        <a href="/blog-post?slug=${esc(featured.slug)}" class="btn-primary" style="align-self:flex-start">Read Article →</a>
       </div>`;
 
     document.getElementById('blog-list').innerHTML = rest.map(p => `
@@ -194,7 +194,7 @@ async function loadBlog() {
           <h3>${esc(p.title)}</h3>
           <div class="blog-meta"><span>${fmtDate(p.createdAt)}</span></div>
           <p>${esc(p.excerpt || '')}</p>
-          <a href="/blog/${esc(p.slug)}" class="read-more">Read Article →</a>
+          <a href="/blog-post?slug=${esc(p.slug)}" class="read-more">Read Article →</a>
         </div>
       </div>`).join('');
 
