@@ -659,7 +659,7 @@ function renderBlog() {
       <td><span class="badge badge-orange">${esc(p.category||'—')}</span></td>
       <td class="td-muted">${esc(p.author)}</td>
       <td>${badge(p.status)}</td>
-      <td class="td-muted">${fmtDate(p.created_at)}</td>
+      <td class="td-muted">${fmtDate(p.createdAt)}</td>
       <td class="td-actions">
         <button class="btn btn-ghost btn-sm btn-icon" onclick="openBlogModal(${p.id})" title="Edit">✏️</button>
         <button class="btn btn-ghost btn-sm btn-icon" onclick="toggleBlogStatus(${p.id},'${p.status==='published'?'draft':'published'}')" title="Toggle status">${p.status==='published'?'📤':'📢'}</button>
@@ -692,11 +692,11 @@ function openBlogModal(id) {
       $('blog-category').value = p.category || '';
       $('blog-status').value   = p.status;
       $('blog-excerpt').value  = p.excerpt || '';
-      $('blog-meta-title').value = p.meta_title || '';
-      $('blog-meta-desc').value  = p.meta_description || '';
-      if (p.featured_image) {
-        $('blog-featured-image').value = p.featured_image;
-        $('blog-img-preview-img').src  = p.featured_image;
+      $('blog-meta-title').value = p.metaTitle || '';
+      $('blog-meta-desc').value  = p.metaDescription || '';
+      if (p.featuredImage) {
+        $('blog-featured-image').value = p.featuredImage;
+        $('blog-img-preview-img').src  = p.featuredImage;
         $('blog-img-preview').style.display = 'block';
       }
       quill.root.innerHTML = p.content || '';
@@ -731,7 +731,18 @@ async function toggleBlogStatus(id, newStatus) {
   const post = blogPosts.find(p => p.id === id);
   if (!post) return;
   try {
-    await api('/api/admin/blog?id=' + id, { method:'PUT', body:JSON.stringify({...post, status:newStatus, content: ''}) });
+    await api('/api/admin/blog?id=' + id, { method:'PUT', body:JSON.stringify({
+      title:           post.title           || '',
+      slug:            post.slug            || '',
+      content:         post.content         || '',
+      excerpt:         post.excerpt         || '',
+      category:        post.category        || '',
+      featured_image:  post.featuredImage   || '',
+      status:          newStatus,
+      author:          post.author          || 'Admin',
+      meta_title:      post.metaTitle       || '',
+      meta_description: post.metaDescription || '',
+    }) });
     toast(newStatus === 'published' ? 'Post published!' : 'Post set to draft.');
     loadBlog();
   } catch(e) { toast(e.message,'error'); }

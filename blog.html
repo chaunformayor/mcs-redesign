@@ -173,26 +173,26 @@ async function loadBlog() {
     const rest = posts.slice(1);
 
     document.getElementById('blog-featured').innerHTML = `
-      <div class="blog-featured-img" style="${featured.featured_image ? `background-image:url('${esc(featured.featured_image)}')` : ''}">
+      <div class="blog-featured-img" style="${featured.featuredImage ? `background-image:url('${esc(featured.featuredImage)}')` : ''}">
         <span class="featured-tag">⭐ Featured</span>
       </div>
       <div class="blog-featured-body">
         <div class="cat">${esc(featured.category || 'General')}</div>
         <h2>${esc(featured.title)}</h2>
-        <div class="blog-meta"><span>${fmtDate(featured.created_at)}</span><span class="dot"></span><span>By ${esc(featured.author)}</span></div>
+        <div class="blog-meta"><span>${fmtDate(featured.createdAt)}</span><span class="dot"></span><span>By ${esc(featured.author)}</span></div>
         <p>${esc(featured.excerpt || '')}</p>
         <a href="/blog/${esc(featured.slug)}" class="btn-primary" style="align-self:flex-start">Read Article →</a>
       </div>`;
 
     document.getElementById('blog-list').innerHTML = rest.map(p => `
       <div class="blog-list-card">
-        <div class="blog-list-img" style="${p.featured_image ? `background-image:url('${esc(p.featured_image)}');background-size:cover;background-position:center` : 'background:var(--light)'}">
-          ${!p.featured_image ? '<svg viewBox="0 0 24 24" style="width:40px;height:40px;fill:rgba(201,168,76,.4)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>' : ''}
+        <div class="blog-list-img" style="${p.featuredImage ? `background-image:url('${esc(p.featuredImage)}');background-size:cover;background-position:center` : 'background:var(--light)'}">
+          ${!p.featuredImage ? '<svg viewBox="0 0 24 24" style="width:40px;height:40px;fill:rgba(201,168,76,.4)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>' : ''}
         </div>
         <div class="blog-list-body">
           <div class="cat">${esc(p.category || 'General')}</div>
           <h3>${esc(p.title)}</h3>
-          <div class="blog-meta"><span>${fmtDate(p.created_at)}</span></div>
+          <div class="blog-meta"><span>${fmtDate(p.createdAt)}</span></div>
           <p>${esc(p.excerpt || '')}</p>
           <a href="/blog/${esc(p.slug)}" class="read-more">Read Article →</a>
         </div>
@@ -200,10 +200,10 @@ async function loadBlog() {
 
     document.getElementById('recent-posts').innerHTML = posts.slice(0, 3).map(p => `
       <div class="recent-post">
-        <div class="recent-post-thumb" style="${p.featured_image ? `background-image:url('${esc(p.featured_image)}');background-size:cover;background-position:center` : 'background:var(--light);display:flex;align-items:center;justify-content:center'}">
-          ${!p.featured_image ? '<svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:rgba(201,168,76,.5)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>' : ''}
+        <div class="recent-post-thumb" style="${p.featuredImage ? `background-image:url('${esc(p.featuredImage)}');background-size:cover;background-position:center` : 'background:var(--light);display:flex;align-items:center;justify-content:center'}">
+          ${!p.featuredImage ? '<svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:rgba(201,168,76,.5)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>' : ''}
         </div>
-        <div><h4>${esc(p.title)}</h4><span>${fmtDate(p.created_at)}</span></div>
+        <div><h4>${esc(p.title)}</h4><span>${fmtDate(p.createdAt)}</span></div>
       </div>`).join('');
 
   } catch(e) {

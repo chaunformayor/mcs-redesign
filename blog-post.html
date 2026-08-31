@@ -133,13 +133,13 @@ async function loadPost() {
     document.title = `${post.title} — Missouri Construction Service`;
 
     document.getElementById('post-main').innerHTML = `
-      ${post.featured_image
-        ? `<img class="post-hero-img" src="${esc(post.featured_image)}" alt="${esc(post.title)}" />`
+      ${post.featuredImage
+        ? `<img class="post-hero-img" src="${esc(post.featuredImage)}" alt="${esc(post.title)}" />`
         : `<div class="post-hero-img-placeholder"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>`}
       <div class="post-cat">${esc(post.category || 'General')}</div>
       <h1 class="post-title">${esc(post.title)}</h1>
       <div class="post-meta">
-        <span>${fmtDate(post.created_at)}</span>
+        <span>${fmtDate(post.createdAt)}</span>
         <span class="dot"></span>
         <span>By ${esc(post.author)}</span>
       </div>
@@ -153,10 +153,10 @@ async function loadPost() {
     document.getElementById('recent-posts').innerHTML = recent.length
       ? recent.map(p => `
           <a href="/blog/${esc(p.slug)}" class="recent-post">
-            <div class="recent-post-thumb" style="${p.featured_image ? `background-image:url('${esc(p.featured_image)}')` : ''}">
-              ${!p.featured_image ? '<svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:rgba(201,168,76,.5)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>' : ''}
+            <div class="recent-post-thumb" style="${p.featuredImage ? `background-image:url('${esc(p.featuredImage)}')` : ''}">
+              ${!p.featuredImage ? '<svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:rgba(201,168,76,.5)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/></svg>' : ''}
             </div>
-            <div><h4>${esc(p.title)}</h4><span>${fmtDate(p.created_at)}</span></div>
+            <div><h4>${esc(p.title)}</h4><span>${fmtDate(p.createdAt)}</span></div>
           </a>`).join('')
       : '<p style="font-size:13px;color:var(--slate)">No other posts yet.</p>';
 
