@@ -1,0 +1,19 @@
+# Keep secrets, git data, local tools and build leftovers out of the Docker image.
+.git
+.gitignore
+.claude
+.vercel
+vercel
+**/.env
+**/.env.*
+!.env.example
+node_modules
+*.log
+*.zip
+*.sql
+remove-watermark.mjs
+upload-portfolio.mjs
+serve.js
+serve.mjs
+Dockerfile
+.dockerignore

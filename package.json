@@ -8,11 +8,14 @@
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.js",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "start": "node server.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@vercel/blob": "^0.27.0",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
     "formidable": "^3.5.2",
     "jose": "^5.9.6"
   },
