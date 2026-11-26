@@ -11,14 +11,14 @@ Chaun — St. Louis-based real estate investor and contractor, 25+ years experie
 
 - **Domain:** missouriconstructionservice.com
 - **GitHub:** github.com/chaunformayor/mcs-redesign
-- **Deployed on:** Vercel (team: chauns-projects, project ID: prj_yv2wa0ce8exs46MHVMDmqWUTzI5f)
+- **Deployed on (since 2026-11-26):** the Oracle "web" server, as the Docker container `mcs`. Every push to `main` is live about 1–2 minutes later (the server checks GitHub every 2 minutes, rebuilds, health-checks `/healthz`, and rolls back on failure). Server setup, settings and backups are documented in the private `oracle-servers` repo (`web/`).
+- **Before that:** Vercel (team: chauns-projects, project `mcs-redesign`). It's kept as a fallback for about 2 weeks, and Vercel still builds `main` there, but the domain no longer points to it.
 - **Local path:** `C:\Users\demet\mcs-redesign\`
-- **Deployment ZIP:** `C:\Users\demet\mcs-redesign\vercel\mcs-vercel-deploy.zip`
 
 ## Stack
 - **Frontend:** Plain HTML/CSS/JS — no framework
-- **Backend:** Vercel Serverless Functions (Node.js ESM, `"type": "module"`)
-- **Database:** Neon Postgres (serverless PostgreSQL, free tier)
+- **Backend:** `server.js` (Express) runs the same `api/*.js` handlers Vercel used to run, at the same URLs, serves the pages with clean URLs, and serves only page and image files (never code or notes). It also limits attempts: admin login 5 per 15 min, forms 10 per 15 min.
+- **Database:** Neon Postgres (serverless PostgreSQL, free tier). Neon org "MISSOURI CONSTRUCTION SERVICE", project `cold-meadow-76612804`.
 - **ORM:** Prisma 5 — schema at `prisma/schema.prisma`
 - **Auth:** JWT (via `jose`) in httpOnly cookies — `lib/auth.js`
 - **Image uploads:** Vercel Blob (`@vercel/blob`) + formidable for multipart parsing
@@ -64,13 +64,13 @@ Seed: `prisma/seed.js` (run once to insert default site settings)
 
 The tables were created by running raw SQL in the Neon SQL Editor (not `prisma db push`).
 
-## Environment Variables (set in Vercel dashboard)
+## Environment Variables (on the web server: `/opt/web/env/mcs.env`, root-only; never in this repo)
 ```
-DATABASE_URL          Neon pooled connection + ?pgbouncer=true&connection_limit=1
+DATABASE_URL          Neon pooled connection (server.js turns connection_limit=1 into 5)
 DIRECT_URL            Neon direct connection (for migrations)
-ADMIN_JWT_SECRET      Long random string for signing JWT tokens
-ADMIN_PASSWORD        Password to log in to /admin-login
-BLOB_READ_WRITE_TOKEN Auto-injected by Vercel when blob store is connected
+ADMIN_JWT_SECRET      Long random string for signing JWT tokens (generated on the server; required)
+ADMIN_PASSWORD        Login password, used only until one is saved in Admin -> Settings (then stored hashed in site_settings). There is no default password.
+BLOB_READ_WRITE_TOKEN Vercel Blob store "mcsblob" (photos still live there)
 ```
 
 ## Key Decisions
