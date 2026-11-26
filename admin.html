@@ -687,7 +687,7 @@ function openBlogModal(id) {
   quill.setText('');
 
   if (id) {
-    api('/api/admin/blog?id=' + id).then(p => {
+    api('/api/admin/blog?id=' + id).then(r => { const p = r.post || r;   // the API wraps it: { post }
       $('blog-title').value    = p.title;
       $('blog-category').value = p.category || '';
       $('blog-status').value   = p.status;
@@ -804,7 +804,7 @@ function openProjModal(id) {
   projImages = [];
 
   if (id) {
-    api('/api/admin/projects?id=' + id).then(p => {
+    api('/api/admin/projects?id=' + id).then(r => { const p = r.project || r;   // the API wraps it: { project }
       $('proj-title').value    = p.title;
       $('proj-category').value = p.category || '';
       $('proj-location').value = p.location || '';
