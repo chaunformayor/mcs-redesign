@@ -1,6 +1,15 @@
 import { prisma } from '../../lib/db.js'
 import { requireAdmin } from '../../lib/auth.js'
 
+// The admin sends gallery photos as { path, caption } objects; older callers sent plain URLs.
+// Accept both (plain objects used to make every save with new photos fail).
+function toImageRows(images) {
+  return images
+    .map(img => (typeof img === 'string' ? { path: img, caption: null } : img ?? {}))
+    .filter(img => typeof img.path === 'string' && img.path)
+    .map((img, i) => ({ imagePath: img.path, caption: img.caption || null, sortOrder: i }))
+}
+
 export default async function handler(req, res) {
   if (!(await requireAdmin(req, res))) return
 
@@ -20,24 +29,26 @@ export default async function handler(req, res) {
     if (req.method === 'PUT') {
       const b = req.body ?? {}
       if (!b.title) return res.status(400).json({ error: 'Title is required' })
-      await prisma.projectImage.deleteMany({ where: { projectId: id } })
-      await prisma.project.update({
-        where: { id },
-        data: {
-          title:         b.title,
-          category:      b.category      ?? '',
-          service:       b.service       ?? '',
-          location:      b.location      ?? '',
-          duration:      b.duration      ?? '',
-          description:   b.description   ?? '',
-          featuredImage: b.featured_image ?? '',
-          status:        b.status        ?? 'active',
-          sortOrder:     b.sort_order    ?? 0,
-          images: b.images?.length
-            ? { create: b.images.map((url, i) => ({ imagePath: url, sortOrder: i })) }
-            : undefined,
-        },
-      })
+      // One transaction: if the update fails, the old photos are not left deleted.
+      const rows = toImageRows(b.images ?? [])
+      await prisma.$transaction([
+        prisma.projectImage.deleteMany({ where: { projectId: id } }),
+        prisma.project.update({
+          where: { id },
+          data: {
+            title:         b.title,
+            category:      b.category      ?? '',
+            service:       b.service       ?? '',
+            location:      b.location      ?? '',
+            duration:      b.duration      ?? '',
+            description:   b.description   ?? '',
+            featuredImage: b.featured_image ?? '',
+            status:        b.status        ?? 'active',
+            sortOrder:     b.sort_order    ?? 0,
+            images: rows.length ? { create: rows } : undefined,
+          },
+        }),
+      ])
       return res.json({ success: true })
     }
 
@@ -72,8 +83,8 @@ export default async function handler(req, res) {
         featuredImage: b.featured_image ?? '',
         status:        b.status        ?? 'active',
         sortOrder:     b.sort_order    ?? 0,
-        images: b.images?.length
-          ? { create: b.images.map((url, i) => ({ imagePath: url, sortOrder: i })) }
+        images: toImageRows(b.images ?? []).length
+          ? { create: toImageRows(b.images ?? []) }
           : undefined,
       },
     })

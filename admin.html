@@ -623,11 +623,11 @@ async function loadDashboard() {
     $('ds-test-sub').textContent = `${d.testimonials.active} visible`;
 
     $('dash-inq-list').innerHTML = d.recent_inquiries.length
-      ? d.recent_inquiries.map(r => `<div class="recent-item"><div><div class="recent-name">${esc(r.name)}</div><div class="recent-meta">${esc(r.service||'General')} · ${fmtDate(r.created_at)}</div></div>${badge(r.status)}</div>`).join('')
+      ? d.recent_inquiries.map(r => `<div class="recent-item"><div><div class="recent-name">${esc(r.name)}</div><div class="recent-meta">${esc(r.service||'General')} · ${fmtDate(r.createdAt || r.created_at)}</div></div>${badge(r.status)}</div>`).join('')
       : '<div style="padding:20px;color:var(--slate);font-size:13px">No inquiries yet.</div>';
 
     $('dash-quote-list').innerHTML = d.recent_quotes.length
-      ? d.recent_quotes.map(r => `<div class="recent-item"><div><div class="recent-name">${esc(r.name)}</div><div class="recent-meta">${esc(r.service)} · ${fmtDate(r.created_at)}</div></div>${badge(r.status)}</div>`).join('')
+      ? d.recent_quotes.map(r => `<div class="recent-item"><div><div class="recent-name">${esc(r.name)}</div><div class="recent-meta">${esc(r.service)} · ${fmtDate(r.createdAt || r.created_at)}</div></div>${badge(r.status)}</div>`).join('')
       : '<div style="padding:20px;color:var(--slate);font-size:13px">No quote requests yet.</div>';
     updateTime();
   } catch(e) { toast(e.message,'error'); }
@@ -771,8 +771,8 @@ function renderProjects() {
     ? projects.map(p => `
       <div class="proj-card">
         <div class="proj-thumb">
-          ${p.featured_image ? `<img src="${esc(p.featured_image)}" alt="${esc(p.title)}" onerror="this.style.display='none'" />` : ''}
-          <div class="proj-thumb-placeholder" style="${p.featured_image?'display:none':''}"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+          ${projFeatured(p) ? `<img src="${esc(projFeatured(p))}" alt="${esc(p.title)}" onerror="this.style.display='none'" />` : ''}
+          <div class="proj-thumb-placeholder" style="${projFeatured(p)?'display:none':''}"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
         </div>
         <div class="proj-info">
           <h3>${esc(p.title)}</h3>
@@ -786,6 +786,11 @@ function renderProjects() {
       </div>`).join('')
     : `<div class="empty" style="grid-column:span 3"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>No projects yet. Add your first one!</div>`;
 }
+
+// The API returns the database's field names (featuredImage, sortOrder, imagePath); older code here
+// used featured_image / sort_order / image_path, so project photos never showed and saving a project
+// wiped them. Read either spelling.
+function projFeatured(p) { return p.featuredImage || p.featured_image || ''; }
 
 function openProjModal(id) {
   $('proj-id').value = id || '';
@@ -806,13 +811,13 @@ function openProjModal(id) {
       $('proj-duration').value = p.duration || '';
       $('proj-desc').value     = p.description || '';
       $('proj-status').value   = p.status;
-      $('proj-sort').value     = p.sort_order || 0;
-      if (p.featured_image) {
-        $('proj-featured-image').value = p.featured_image;
-        $('proj-img-preview-img').src  = p.featured_image;
+      $('proj-sort').value     = p.sortOrder ?? p.sort_order ?? 0;
+      if (projFeatured(p)) {
+        $('proj-featured-image').value = projFeatured(p);
+        $('proj-img-preview-img').src  = projFeatured(p);
         $('proj-img-preview').style.display = 'block';
       }
-      projImages = (p.images || []).map(i => ({path:i.image_path, caption:i.caption||''}));
+      projImages = (p.images || []).map(i => ({path:i.imagePath || i.image_path, caption:i.caption||''}));
       renderProjGallery();
     });
   }
@@ -950,7 +955,7 @@ function renderInquiries() {
       <td><a href="mailto:${esc(r.email)}" style="color:var(--orange)">${esc(r.email)}</a>${r.phone?`<br><span class="td-muted">${esc(r.phone)}</span>`:''}</td>
       <td>${r.service?`<span class="badge badge-orange">${esc(r.service)}</span>`:'—'}</td>
       <td class="td-muted" style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.message)}">${esc(r.message)}</td>
-      <td class="td-muted">${fmtDate(r.created_at)}</td>
+      <td class="td-muted">${fmtDate(r.createdAt || r.created_at)}</td>
       <td>
         <select class="status-sel" onchange="updateInqStatus(${r.id},this.value)">
           ${['new','contacted','quoted','closed'].map(s=>`<option value="${s}"${r.status===s?' selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
@@ -976,7 +981,7 @@ async function loadQuotes() {
         <td><span class="badge badge-orange">${esc(r.service)}</span></td>
         <td class="td-muted">${esc(r.timeline||'—')}</td>
         <td class="td-muted">${esc(r.budget||'—')}</td>
-        <td class="td-muted">${fmtDate(r.created_at)}</td>
+        <td class="td-muted">${fmtDate(r.createdAt || r.created_at)}</td>
         <td>${badge(r.status)}</td>
       </tr>`).join('')
       : `<tr><td colspan="7" class="empty">No quote requests yet.</td></tr>`;
