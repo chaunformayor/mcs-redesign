@@ -3,7 +3,7 @@ import { prisma } from '../../lib/db.js'
 import { requireAdmin } from '../../lib/auth.js'
 
 const ALLOWED_KEYS = ['phone', 'email', 'address', 'hours_weekday', 'hours_weekend']
-const ENV_PASSWORD = process.env.ADMIN_PASSWORD ?? 'changeme123'
+const ENV_PASSWORD = process.env.ADMIN_PASSWORD || null   // no built-in default password
 
 function hashPassword(password) {
   const salt = randomBytes(16).toString('hex')
@@ -21,7 +21,7 @@ function verifyHashed(password, stored) {
 async function checkCurrentPassword(password) {
   const row = await prisma.siteSetting.findUnique({ where: { settingKey: 'admin_password_hash' } }).catch(() => null)
   if (row?.settingValue) return verifyHashed(password, row.settingValue)
-  return password === ENV_PASSWORD
+  return !!ENV_PASSWORD && password === ENV_PASSWORD
 }
 
 export default async function handler(req, res) {
